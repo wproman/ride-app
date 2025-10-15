@@ -1,4 +1,4 @@
-import { ThemeProviderContext } from "@/constext/theme.context"
+import { ThemeProviderContext } from "@/context/theme.context"
 import { useEffect, useState } from "react"
 
 export type Theme = "dark" | "light" | "system"
