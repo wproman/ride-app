@@ -12,18 +12,22 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { role } from "@/constance/role"
 import { authApi, useLogoutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api"
 import { useAppDispatch } from "@/redux/hooks"
 import { Link } from "react-router"
 import { ModeToggle } from "./Mode.toggler"
 
+
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About"  },
-  {href: "/features", label: "Features"},
-  { href: "/contact", label: "Contact" },
-  { href: "/faq", label: "FAQ" },
+  { href: "/", label: "Home", role: "PUBLIC"},
+  { href: "/about", label: "About",role: "PUBLIC"  },
+  {href: "/features", label: "Features",role: "PUBLIC"},
+  { href: "/contact", label: "Contact",role: "PUBLIC" },
+  { href: "/faq", label: "FAQ",role: "PUBLIC" },
+  {href: "/admin", label: "Dashboard", role: role.ADMIN},
+  {href: "/rider", label: "Dashboard", role: role.RIDER}
 
  
 ]
@@ -32,7 +36,7 @@ export default function Navbar() {
  const {data} =useUserInfoQuery(undefined)
   const [logout] = useLogoutMutation()
   const dispatch = useAppDispatch()
-  console.log(data?.data.email)
+  
  const handleLogout = () => {
   logout(undefined);
   dispatch(authApi.util.resetApiState())
@@ -83,6 +87,7 @@ export default function Navbar() {
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => (
+                    
                     <NavigationMenuItem key={index} className="w-full">
                       <NavigationMenuLink
                        
@@ -99,47 +104,55 @@ export default function Navbar() {
           </Popover>
           {/* Main nav */}
           <div className="flex items-center gap-6">
-            <a href="#" className="text-primary hover:text-primary/90">
+            <Link to ="/" className="text-primary hover:text-primary/90">
               <Logo />
-            </a>
+            </Link>
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
-                {navigationLinks.map((link, index) => (
-                  <NavigationMenuItem key={index}>
-                    <NavigationMenuLink asChild
-                    
-                     
-                      className="text-muted-foreground hover:text-primary py-1.5 font-medium"
-                    >
-                      <Link to ={link.href}>{link.label}</Link>
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                ))}
-              </NavigationMenuList>
+              {navigationLinks.map((link, index) => {
+  const isVisible =
+    link.role === "PUBLIC" || link.role === data?.data?.role;
+
+  if (!isVisible) return null;
+
+  return (
+    <NavigationMenuItem key={index}>
+      <NavigationMenuLink
+        asChild
+        className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+      >
+        <Link to={link.href}>{link.label}</Link>
+      </NavigationMenuLink>
+    </NavigationMenuItem>
+  );
+})}
+             </NavigationMenuList>
             </NavigationMenu>
           </div>
         </div>
         {/* Right side */}
         <div className="flex items-center gap-2">
           <ModeToggle/>
-          {data?.email && (
-<Button asChild variant="ghost" size="sm" className="text-sm">
-            <Link to = "/login">Log In</Link>
-          </Button>
-          )}
-          {!data?.email && (
-          <Button onClick={handleLogout} variant= "outline"  className="text-sm">
-           Log out 
-          </Button>
-          ) }
+        {!data?.data?.email && (
+  <Button asChild variant="ghost" size="sm" className="text-sm">
+    <Link to="/login">Log In</Link>
+  </Button>
+)}
+
+{data?.data?.email && (
+  <Button onClick={handleLogout} variant="outline" className="text-sm">
+    Log out
+  </Button>
+)}
+
           
         </div>
       </div>
     </header>
   )
 }
-// import React, { useState } from 'react';
+
 // import { Link, useLocation } from 'react-router';
 
 // const Navbar: React.FC = () => {

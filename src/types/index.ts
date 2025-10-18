@@ -1,3 +1,4 @@
+import { ComponentType } from "react";
 
 
 export type { ILogin, ISendOtp, IVerifyOtp } from "./auth.type";
@@ -15,11 +16,11 @@ export interface ISidebarItem {
   items: {
     title: string;
     url: string;
-    // component: ComponentType;
+    component: ComponentType;
   }[];
 }
 
-export type TRole = "SUPER_ADMIN" | "ADMIN" | "USER";
+export type TRole = "ADMIN" | "RIDER" | "USER";
 
 type ZodIssue = {
   code: string;
