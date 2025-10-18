@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -12,7 +13,7 @@ import config from "@/config";
 import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router"; // Fixed import
 import { toast } from "sonner";
 
 export function LoginForm({
@@ -20,31 +21,49 @@ export function LoginForm({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   const navigate = useNavigate();
-const form = useForm({
-  defaultValues: {
-    email: "salman1@example.com", // Use the working email
-    password: "123456",           // Use the working password
-  },
-});
-  const [login] = useLoginMutation();
+  const form = useForm({
+    defaultValues: {
+      email: "salman1@example.com",
+      password: "123456",
+    },
+  });
+  
+  const [login, { isLoading }] = useLoginMutation();
+  
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const res = await login(data).unwrap();
-        console.log(res)
+      console.log(res);
+
       if (res.success) {
         toast.success("Logged in successfully");
         navigate("/");
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) { // Fixed: Added proper typing
+      console.error("Login error:", err);
 
-      if (err.data.message === "Password does not match") {
-        toast.error("Invalid credentials");
+      // Handle 403 Forbidden (Blocked/Suspended user)
+      if (err?.status === 403) {
+        toast.error("Your account has been restricted. Please contact support.");
+        navigate("/account-status");
+        return;
       }
 
-      if (err.data.message === "User is not verified") {
+      // Handle other specific errors from your backend
+      if (err?.data?.message === "Password does not match") {
+        toast.error("Invalid credentials");
+      } else if (err?.data?.message === "User is not verified") {
         toast.error("Your account is not verified");
-        navigate("/verify", { state: data.email });
+        navigate("/verify", { state: { email: data.email } }); // Fixed state object
+      } else if (err?.data?.message === "User is blocked" || err?.data?.message === "User is suspended") {
+        toast.error("Your account has been restricted");
+        navigate("/account-status");
+      } else if (err?.data?.message) {
+        // Show any other error message from backend
+        toast.error(err.data.message);
+      } else {
+        // Generic error
+        toast.error("Login failed. Please try again.");
       }
     }
   };
@@ -71,6 +90,7 @@ const form = useForm({
                       placeholder="john@example.com"
                       {...field}
                       value={field.value || ""}
+                      autoComplete="email" // Added for accessibility
                     />
                   </FormControl>
                   <FormMessage />
@@ -90,6 +110,7 @@ const form = useForm({
                       placeholder="********"
                       {...field}
                       value={field.value || ""}
+                      autoComplete="current-password" // Added for accessibility
                     />
                   </FormControl>
                   <FormMessage />
@@ -97,8 +118,12 @@ const form = useForm({
               )}
             />
 
-            <Button type="submit" className="w-full">
-              Login
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={isLoading}
+            >
+              {isLoading ? "Logging in..." : "Login"}
             </Button>
           </form>
         </Form>
@@ -109,7 +134,6 @@ const form = useForm({
           </span>
         </div>
 
-        {/*//* http://localhost:5000/api/v1/auth/google */}
         <Button
           onClick={() => window.open(`${config.baseUrl}/auth/google`)}
           type="button"

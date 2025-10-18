@@ -24,6 +24,10 @@ const axiosBaseQuery =
         data,
         params,
         headers,
+        //      headers: {
+        //   ...headers,
+        //   // Authorization header should be handled by axiosInstance interceptor
+        // },
       })
       return { data: result.data }
     } catch (axiosError) {

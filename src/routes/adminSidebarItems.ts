@@ -1,4 +1,5 @@
 // import Analytics from "@/pages/Admin/Analytics";
+import AdminUserManagement from "@/pages/Admin/AdminUserManagement";
 import { ISidebarItem } from "@/types";
 import { lazy } from "react";
 const Analytics = lazy(()=>
@@ -16,9 +17,9 @@ export const adminSidebarItems : ISidebarItem[]= [
         },
          
           {
-          title: "habi jabi",
-          url: "/admin/habijabi",
-          component: Analytics
+          title: "User-Managent",
+          url: "/admin/user-management",
+          component: AdminUserManagement
         },
          
       ],
