@@ -1,4 +1,5 @@
 import App from "@/App";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 // import DashboardLayout from "@/components/layout/DashboardLayout";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
@@ -8,9 +9,12 @@ import Features from "@/pages/Features";
 // import Login from "@/pages/Login";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
+import { generateRoutes } from "@/utils/generateRoutes";
 
 // import { generateRoutes } from "@/utils/generateRoutes";
-import { createBrowserRouter, } from "react-router";
+import { createBrowserRouter, Navigate, } from "react-router";
+import { adminSidebarItems } from "./adminSidebarItems";
+
 // import { adminSidebarItems } from "./adminSidebarItems";
 // import { userSidebarItems } from "./userSidebarItems";
 // import { withAuth } from "@/utils/withAuth";
@@ -23,16 +27,22 @@ import { createBrowserRouter, } from "react-router";
 // import Homepage from "@/pages/Homepage";
 // import Success from "@/pages/Payment/Success";
 // import Fail from "@/pages/Payment/Fail";
+import { role } from "@/constance/role";
+import Home from "@/pages/Home";
+import Unauthorized from "@/pages/Unauthorized";
+import { riderSidebarItems } from '@/routes/riderSidebarItems';
+import { TRole } from "@/types";
+import { withAuth } from "@/utils/withAuth";
 
 export const router = createBrowserRouter([
   {
     Component: App,
     path: "/",
     children: [
-      // {
-      //   Component: Homepage,
-      //   index: true,
-      // },
+      {
+        Component: Home,
+        index: true,
+      },
       {
         Component: About,
         path: "about",
@@ -63,22 +73,24 @@ export const router = createBrowserRouter([
       // },
     ],
   },
-  // {
-  //   Component: withAuth(DashboardLayout, role.superAdmin as TRole),
-  //   path: "/admin",
-  //   children: [
-  //     { index: true, element: <Navigate to="/admin/analytics" /> },
-  //     ...generateRoutes(adminSidebarItems),
-  //   ],
-  // },
-  // {
-  //   Component: withAuth(DashboardLayout, role.user as TRole),
-  //   path: "/user",
-  //   children: [
-  //     { index: true, element: <Navigate to="/user/bookings" /> },
-  //     ...generateRoutes(userSidebarItems),
-  //   ],
-  // },
+
+  {
+    Component: withAuth(DashboardLayout, role.ADMIN as TRole),
+    path: "/admin",
+    children: [
+      { index: true, element: <Navigate to="/admin/analytics" /> },
+      ...generateRoutes(adminSidebarItems),
+    ],
+  },
+  {
+    Component: withAuth(DashboardLayout, role.RIDER as TRole),
+    path: "/rider",
+    children: [
+      { index: true, element: <Navigate to="/rider/bookings" /> },
+      ...generateRoutes(riderSidebarItems),
+    ],
+  },
+
   {
     Component: Login,
     path: "/login",
@@ -91,10 +103,10 @@ export const router = createBrowserRouter([
   //   Component: AccountStatus,
   //   path: "/account-status",
   // },
-  // {
-  //   Component: Unauthorized,
-  //   path: "/unauthorized",
-  // },
+  {
+    Component: Unauthorized,
+    path: "/unauthorized",
+  },
   // {
   //   Component: Success,
   //   path: "/payment/success",
