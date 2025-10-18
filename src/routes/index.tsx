@@ -28,11 +28,13 @@ import { adminSidebarItems } from "./adminSidebarItems";
 // import Success from "@/pages/Payment/Success";
 // import Fail from "@/pages/Payment/Fail";
 import { role } from "@/constance/role";
+import AccountStatus from "@/pages/auth/AccountStatus";
 import Home from "@/pages/Home";
 import Unauthorized from "@/pages/Unauthorized";
 import { riderSidebarItems } from '@/routes/riderSidebarItems';
 import { TRole } from "@/types";
 import { withAuth } from "@/utils/withAuth";
+import { driverSidebarItems } from "./driverSidebarItems";
 
 export const router = createBrowserRouter([
   {
@@ -90,6 +92,14 @@ export const router = createBrowserRouter([
       ...generateRoutes(riderSidebarItems),
     ],
   },
+   {
+    Component: withAuth(DashboardLayout, role.DRIVER as TRole),
+    path: "/driver",
+    children: [
+      { index: true, element: <Navigate to="/driver/status" /> },
+      ...generateRoutes(driverSidebarItems),
+    ],
+  },
 
   {
     Component: Login,
@@ -99,10 +109,10 @@ export const router = createBrowserRouter([
     Component: Register,
     path: "/register",
   },
-  // {
-  //   Component: AccountStatus,
-  //   path: "/account-status",
-  // },
+  {
+    Component: AccountStatus,
+    path: "/account-status",
+  },
   {
     Component: Unauthorized,
     path: "/unauthorized",

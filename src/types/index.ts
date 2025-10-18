@@ -1,4 +1,4 @@
-import { ComponentType } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 
 export type { ILogin, ISendOtp, IVerifyOtp } from "./auth.type";
@@ -16,7 +16,7 @@ export interface ISidebarItem {
   items: {
     title: string;
     url: string;
-    component: ComponentType;
+      component: React.ComponentType<any>; // Allow any props
   }[];
 }
 
