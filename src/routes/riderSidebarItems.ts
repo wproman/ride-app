@@ -1,5 +1,5 @@
 
-import Bookings from "@/pages/Rider/Bookings";
+import RideRequestForm from "@/pages/Rider/RideRequestForm";
 import { ISidebarItem } from "@/types";
 
 export const riderSidebarItems : ISidebarItem[]= [
@@ -9,8 +9,8 @@ export const riderSidebarItems : ISidebarItem[]= [
       items: [
         {
           title: "Bookings",
-          url: "/rider/bookings",
-          component: Bookings
+          url: "/rider/ride-request",
+          component: RideRequestForm
         },
        
          
