@@ -73,7 +73,7 @@ export function RegisterForm({
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(registerSchema) as any,
     defaultValues: {
       name: "",
       email: "",
