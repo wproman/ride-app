@@ -144,8 +144,8 @@ const AdminUserManagement = () => {
   <div className="flex space-x-2">
     {user.driver?.approvalStatus !== 'approved' && (
       <button
-        onClick={() => handleApproveDriver(user.driver?._id, "approved")}
-        disabled={isApproving && approvingDriverId === user.driver?._id}
+        onClick={() => handleApproveDriver(user._id, "approved")}
+        disabled={isApproving && approvingDriverId === user._id}
         className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
       >
         {(isApproving && approvingDriverId === user.driver?._id) ? "Approving..." : "Approve"}

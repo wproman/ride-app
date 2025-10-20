@@ -2,8 +2,10 @@
 import { useEstimateFareMutation, useRequestRideMutation } from "@/redux/features/rider/riderApi";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import { useNavigate } from 'react-router';
 
 const RideRequestForm = () => {
+   const navigate = useNavigate();
   const [requestRide, { isLoading: isRequesting }] = useRequestRideMutation();
   const [estimateFare, { isLoading: isEstimating }] = useEstimateFareMutation();
   
@@ -28,13 +30,16 @@ const RideRequestForm = () => {
       };
       
       const result = await estimateFare(estimateData).unwrap();
-      
+        console.log(result.data)
       if (result.success) {
+        
+         
         setFare(result.data.fare);
         setDistance(result.data.distance);
         setDuration(result.data.duration);
         setBreakdown(result.data.breakdown);
         toast.success(`Estimated Fare: ৳${result.data.fare}`);
+       
       }
       
     } catch (error: any) {
@@ -70,6 +75,8 @@ const RideRequestForm = () => {
         setDuration(null);
         setBreakdown(null);
         setPaymentMethod("cash");
+         navigate(`/rider/live-ride/${result.data._id}`);
+        //  navigate(`/rider/live-ride`);
       }
       
     } catch (error: any) {
