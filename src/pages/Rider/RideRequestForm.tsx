@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEstimateFareMutation, useRequestRideMutation } from "@/redux/features/rider/riderApi";
+import { useEstimateFareMutation, useRequestRideMutation } from "@/redux/features/ride/riderApi";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from 'react-router';

@@ -1,5 +1,5 @@
 // types/ride.ts
-export type RideStatus = 'pending' | 'accepted' | 'in_progress' | 'completed' | 'cancelled' | 'rejected';
+export type RideStatus = 'pending' | 'accepted' | 'in_progress' | 'completed' | 'cancelled' | 'rejected'|'requested';
 
 export interface RideFilters {
   status?: RideStatus;
@@ -15,6 +15,7 @@ export interface RideFilters {
 // Extended interface to match API response
 export interface ApiRide {
   _id: string;
+   rideId: string;
   riderId: {
     _id: string;
     name: string;

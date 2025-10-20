@@ -30,6 +30,8 @@ import { adminSidebarItems } from "./adminSidebarItems";
 import { role } from "@/constance/role";
 import AccountStatus from "@/pages/auth/AccountStatus";
 import Home from "@/pages/Home";
+import LiveRideTracking from "@/pages/Ride/[Live-ride]";
+import RideDetails from "@/pages/Ride/RideDetails";
 import Unauthorized from "@/pages/Unauthorized";
 import { riderSidebarItems } from '@/routes/riderSidebarItems';
 import { TRole } from "@/types";
@@ -90,6 +92,14 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/rider/ride-request" /> },
       ...generateRoutes(riderSidebarItems),
+       { 
+      path: "live-ride/:rideId", 
+      Component: LiveRideTracking 
+    },
+    {
+        path: '/rider/ride-details/:rideId',
+        Component: RideDetails
+      },
     ],
   },
    {

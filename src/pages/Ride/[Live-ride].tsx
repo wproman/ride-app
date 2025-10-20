@@ -1,10 +1,22 @@
-import { useGetRideDetailsQuery } from "@/redux/features/rider/riderApi";
-import { useParams } from "react-router";
+// Enhanced LiveRideTracking.tsx
+import { useGetMyCurrentRideQuery, useGetRideDetailsQuery } from "@/redux/features/ride/riderApi";
+import { useNavigate, useParams } from "react-router";
 
 const LiveRideTracking = () => {
   const { rideId } = useParams();
-  const { data: rideData, isLoading } = useGetRideDetailsQuery(rideId!);
-//   const [currentStatus, setCurrentStatus] = useState("requested");
+  const navigate = useNavigate();
+  
+  // If no rideId in URL, try to get current ride
+  const { data: currentRideResponse } = useGetMyCurrentRideQuery(undefined, {
+    skip: !!rideId // Skip this query if we already have a rideId
+  });
+
+  // Use the rideId from URL OR from current ride
+  const effectiveRideId = rideId || currentRideResponse?.data?.rideId;
+
+  const { data: rideData, isLoading } = useGetRideDetailsQuery(effectiveRideId!, {
+    skip: !effectiveRideId // Skip if no rideId available
+  });
 
   const ride = rideData?.data;
 
@@ -29,6 +41,25 @@ const LiveRideTracking = () => {
     { key: "completed", label: "Completed", color: "bg-gray-500" }
   ];
 
+  // If no rideId and no current ride, show message
+  if (!effectiveRideId && !isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center p-8">
+          <div className="text-6xl mb-4">🚗</div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">No Active Ride</h2>
+          <p className="text-gray-600 mb-6">You don't have any ongoing rides at the moment.</p>
+          <button 
+            onClick={() => navigate('/rider/ride-request')}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium"
+          >
+            Book a Ride
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -45,6 +76,12 @@ const LiveRideTracking = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-500 text-lg">Ride not found</p>
+          <button 
+            onClick={() => navigate('/rider/current-ride')}
+            className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+          >
+            Check Current Ride
+          </button>
         </div>
       </div>
     );
@@ -116,15 +153,29 @@ const LiveRideTracking = () => {
         <div className="border-t pt-4 space-y-3">
           <div className="flex justify-between">
             <span className="text-gray-600">From:</span>
-            <span className="font-medium text-right">{ride.pickupLocation.address}</span>
+            <span className="font-medium text-right">
+              {ride.pickupLocation?.address || 'Location not specified'}
+            </span>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-600">To:</span>
-            <span className="font-medium text-right">{ride.destination.address}</span>
+            <span className="font-medium text-right">
+              {ride.destination?.address || 'Location not specified'}
+            </span>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-600">Fare:</span>
             <span className="font-bold text-green-600">৳{ride.fare}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-600">Status:</span>
+            <span className={`font-medium ${
+              ride.rideStatus === 'completed' ? 'text-green-600' :
+              ride.rideStatus === 'cancelled' ? 'text-red-600' :
+              'text-blue-600'
+            }`}>
+              {ride.rideStatus}
+            </span>
           </div>
         </div>
       </div>
@@ -134,7 +185,14 @@ const LiveRideTracking = () => {
         <div className="flex justify-between items-center">
           <div>
             <p className="font-medium text-blue-800">Current Status</p>
-            <p className="text-blue-600">Looking for drivers...</p>
+            <p className="text-blue-600 capitalize">
+              {ride.rideStatus === 'requested' && 'Looking for drivers...'}
+              {ride.rideStatus === 'accepted' && 'Driver accepted your ride'}
+              {ride.rideStatus === 'arriving' && 'Driver is arriving'}
+              {ride.rideStatus === 'in_progress' && 'Ride in progress'}
+              {ride.rideStatus === 'completed' && 'Ride completed'}
+              {ride.rideStatus === 'cancelled' && 'Ride cancelled'}
+            </p>
           </div>
           <div className="text-right">
             <p className="text-2xl font-bold text-blue-800">৳{ride.fare}</p>
@@ -154,9 +212,11 @@ const LiveRideTracking = () => {
           <span>Message Driver</span>
         </button>
         
-        <button className="w-full bg-red-500 hover:bg-red-600 text-white py-4 rounded-lg font-medium">
-          Cancel Ride
-        </button>
+        {ride.rideStatus !== 'completed' && ride.rideStatus !== 'cancelled' && (
+          <button className="w-full bg-red-500 hover:bg-red-600 text-white py-4 rounded-lg font-medium">
+            Cancel Ride
+          </button>
+        )}
       </div>
 
       {/* Safety Notice */}

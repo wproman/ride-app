@@ -1,5 +1,6 @@
 
 import Status from "@/pages/Driver/Status";
+import RideHistory from "@/pages/Ride/RideHistory";
 import { ISidebarItem } from "@/types";
 
 export const driverSidebarItems : ISidebarItem[]= [
@@ -13,7 +14,11 @@ export const driverSidebarItems : ISidebarItem[]= [
           component: Status
         },
        
-         
+            {
+        title: "Ride History",
+        url: "/driver/ride-history",
+        component: RideHistory
+      },
       ],
     },
 ]
