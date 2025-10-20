@@ -30,7 +30,7 @@ const RideRequestForm = () => {
       };
       
       const result = await estimateFare(estimateData).unwrap();
-      
+        console.log(result.data)
       if (result.success) {
         
          
