@@ -1,8 +1,7 @@
-// redux/features/admin/admin.api.ts
 import { baseApi } from "@/redux/baseApi";
 
-export const riderApi  = baseApi.injectEndpoints({
- endpoints: (builder) => ({
+export const riderApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
     // 🟢 Create Ride Request
     requestRide: builder.mutation({
       query: (rideData) => ({
@@ -13,7 +12,7 @@ export const riderApi  = baseApi.injectEndpoints({
       invalidatesTags: ["RIDE"],
     }),
 
-    // 🟡 Estimate Fare (Optional)
+    // 🟡 Estimate Fare
     estimateFare: builder.mutation({
       query: ({ pickup, destination }) => ({
         url: "/rides/estimate",
@@ -21,7 +20,20 @@ export const riderApi  = baseApi.injectEndpoints({
         data: { pickup, destination },
       }),
     }),
+
+   // 🟡 Get Ride Details - FIXED
+    getRideDetails: builder.query({
+      query: (rideId: string) => ({
+        url: `/rides/${rideId}`,
+        method: "GET",
+      }),
+      providesTags: ["RIDE"],
     }),
+  }),
 });
 
-export const { useRequestRideMutation, useEstimateFareMutation } = riderApi;
+export const { 
+  useRequestRideMutation, 
+  useEstimateFareMutation, 
+  useGetRideDetailsQuery 
+} = riderApi;
