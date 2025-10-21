@@ -4,6 +4,7 @@
 import RideHistory from "@/pages/Ride/RideHistory";
 import LiveRideTracking from "@/pages/Ride/[Live-ride]";
 import RideRequestForm from "@/pages/Rider/RideRequestForm";
+import ProfileManagement from "@/pages/User/ProfileManagement";
 import { ISidebarItem } from "@/types";
 
 export const riderSidebarItems : ISidebarItem[]= [
@@ -33,7 +34,12 @@ export const riderSidebarItems : ISidebarItem[]= [
       //   url: "/rider/ride-details/:rideId",
       //   component: RideDetails
       // },
-         
+         {
+  
+    title: "Profile",
+    url: "/rider/profile",
+    component: ProfileManagement
+  },
       ],
     },
 ]

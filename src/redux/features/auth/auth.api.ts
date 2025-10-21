@@ -55,31 +55,39 @@ export const authApi = baseApi.injectEndpoints({
         }
       },
     }),
-    userInfo: builder.query({
-      query: () => ({
-        url: "/user/me",
-        method: "GET",
+    // userInfo: builder.query({
+    //   query: () => ({
+    //     url: "/user/me",
+    //     method: "GET",
+    //   }),
+    //   providesTags: ["USER"],
+    //   async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+    //     try {
+    //       const { data } = await queryFulfilled;
+    //       if (data.success && data.data) {
+    //         dispatch(setCredentials({ user: data.data }));
+    //       }
+    //     } catch (error) {
+    //       // Handle error if needed
+    //     }
+    //   },
+    // }),
+    // Change Password
+    changePassword: builder.mutation({
+      query: (passwordData: { oldPassword: string; newPassword: string }) => ({
+        url: "/auth/reset-password", 
+        method: "PATCH",
+        data: passwordData,
       }),
-      providesTags: ["USER"],
-      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          if (data.success && data.data) {
-            dispatch(setCredentials({ user: data.data }));
-          }
-        } catch (error) {
-          // Handle error if needed
-        }
-      },
     }),
-  
   }),
 });
 
 export const {
   useRegisterMutation,
   useLoginMutation,
-  useUserInfoQuery,
+  useChangePasswordMutation,
+  // useUserInfoQuery,
   useLogoutMutation,
 
 } = authApi;

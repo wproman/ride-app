@@ -13,10 +13,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { role } from "@/constance/role"
-import { authApi, useLogoutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api"
+import { authApi, useLogoutMutation } from "@/redux/features/auth/auth.api"
 import { useAppDispatch } from "@/redux/hooks"
 import { Link } from "react-router"
 import { ModeToggle } from "./Mode.toggler"
+//ai line tao authApi slio 8:00pm
+import { useGetProfileQuery } from "@/redux/features/user/profileApi"
 
 
 // Navigation links array to be used in both desktop and mobile menus
@@ -32,7 +34,7 @@ const navigationLinks = [
 ]
 
 export default function Navbar() {
- const {data} =useUserInfoQuery(undefined)
+ const {data} =useGetProfileQuery (undefined)
   const [logout] = useLogoutMutation()
   const dispatch = useAppDispatch()
   

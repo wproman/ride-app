@@ -13,7 +13,8 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { useUserInfoQuery } from "@/redux/features/auth/auth.api"
+// auth theke getprofile import kora sila jeta ami profileApi diya change korlam 8:00pm
+import { useGetProfileQuery } from "@/redux/features/user/profileApi"
 import { getSidebarItems } from "@/utils/getSidebarItems"
 import { Link } from "react-router"
 
@@ -21,7 +22,7 @@ import { Link } from "react-router"
 
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const {data: userData} = useUserInfoQuery(undefined)
+  const {data: userData} = useGetProfileQuery(undefined)
  
   const data = {
 
