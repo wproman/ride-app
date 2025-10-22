@@ -23,8 +23,8 @@ export function LoginForm({
   const navigate = useNavigate();
   const form = useForm({
     defaultValues: {
-      email: "salman1@example.com",
-      password: "123456",
+      email: "super@gmail.com",
+      password: "12345678",
     },
   });
   
