@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // src/components/driver/IncomingRides.tsx
 import {
-    useAcceptRideMutation,
-    useGetIncomingRidesQuery,
-    useRejectRideMutation
-} from '@/redux/features/ride/riderApi';
+  useAcceptRideMutation,
+  useGetIncomingRidesQuery,
+  useRejectRideMutation
+} from '@/redux/features/driver/driverApi';
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router';
 
 interface RideRequest {
   _id: string;
@@ -30,6 +31,7 @@ interface RideRequest {
 }
 
 const IncomingRides = () => {
+    const navigate = useNavigate();
   const { data: ridesResponse, isLoading, error, refetch } = useGetIncomingRidesQuery(undefined);
   const [acceptRide, { isLoading: isAccepting }] = useAcceptRideMutation();
   const [rejectRide, { isLoading: isRejecting }] = useRejectRideMutation();
@@ -79,23 +81,29 @@ const IncomingRides = () => {
     return () => timers.forEach(timer => clearInterval(timer));
   }, [incomingRides]); // Now this dependency is stable
 
-  const handleAcceptRide = async (rideId: string) => {
-    try {
-      setSelectedRide(rideId);
-      await acceptRide(rideId).unwrap();
-      // Success will be handled by invalidateTags
-    } catch (error: any) {
-      console.error('Failed to accept ride:', error);
-      alert(error?.data?.message || 'Failed to accept ride');
-    } finally {
-      setSelectedRide(null);
-    }
-  };
+  // In IncomingRides.tsx - redirect to the shared component
+const handleAcceptRide = async (rideId: string) => {
+  try {
+    setSelectedRide(rideId);
+     await acceptRide(rideId).unwrap();
+   
+    
+    // Redirect to shared live tracking (it will detect user role)
+    navigate(`/live-ride/${rideId}`);
+    
+  } catch (error: any) {
+    console.error('Failed to accept ride:', error);
+    alert(error?.data?.message || 'Failed to accept ride');
+  } finally {
+    setSelectedRide(null);
+  }
+};
 
   const handleRejectRide = async (rideId: string) => {
     try {
       setSelectedRide(rideId);
       await rejectRide(rideId).unwrap();
+       
     } catch (error: any) {
       console.error('Failed to reject ride:', error);
       alert(error?.data?.message || 'Failed to reject ride');

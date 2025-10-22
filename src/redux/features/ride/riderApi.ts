@@ -46,33 +46,15 @@ export const riderApi = baseApi.injectEndpoints({
       }),
       providesTags: ["RIDE"],
     }),
-   
-    // Get incoming ride requests
-    getIncomingRides: builder.query({
-      query: () => ({
-        url: "/rides/incoming", // You'll need to create this endpoint
-        method: "GET",
-      }),
-      providesTags: ["INCOMING_RIDES"],
-    }),
 
-    // Accept a ride
-    acceptRide: builder.mutation({
+   cancelRide: builder.mutation({
       query: (rideId: string) => ({
-        url: `/rides/${rideId}/accept`,
-        method: "PATCH",
+        url: `rides/${rideId}/cancel`,
+        method: 'PATCH',
       }),
-      invalidatesTags: ["INCOMING_RIDES", "DRIVER"], // Invalidate both incoming rides and driver status
+      invalidatesTags: ['RIDE'],
     }),
-
-    // Reject a ride
-    rejectRide: builder.mutation({
-      query: (rideId: string) => ({
-        url: `/rides/${rideId}/reject`,
-        method: "PATCH",
-      }),
-      invalidatesTags: ["INCOMING_RIDES"],
-    }),
+ 
   }),
 });
 
@@ -82,8 +64,6 @@ export const {
   useGetRideDetailsQuery,
   useGetMyRideHistoryQuery,
   useGetMyCurrentRideQuery,
-   useGetIncomingRidesQuery,
-  useAcceptRideMutation,
-  useRejectRideMutation
+  
   
 } = riderApi;

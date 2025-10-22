@@ -29,8 +29,8 @@ import { adminSidebarItems } from "./adminSidebarItems";
 // import Fail from "@/pages/Payment/Fail";
 import { role } from "@/constance/role";
 import AccountStatus from "@/pages/auth/AccountStatus";
+// import DriverLiveRide from "@/pages/Driver/DriverLiveRide";
 import Home from "@/pages/Home";
-import LiveRideTracking from "@/pages/Ride/[Live-ride]";
 import RideDetails from "@/pages/Ride/RideDetails";
 import Unauthorized from "@/pages/Unauthorized";
 import { riderSidebarItems } from '@/routes/riderSidebarItems';
@@ -92,10 +92,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/rider/ride-request" /> },
       ...generateRoutes(riderSidebarItems),
-       { 
-      path: "live-ride/:rideId", 
-      Component: LiveRideTracking 
-    },
+   
     {
         path: '/rider/ride-details/:rideId',
         Component: RideDetails
@@ -108,6 +105,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/driver/driver-dashboard" /> },
       ...generateRoutes(driverSidebarItems),
+
     ],
   },
 
@@ -135,4 +133,5 @@ export const router = createBrowserRouter([
   //   Component: Fail,
   //   path: "/payment/fail",
   // },
+    
 ]);
