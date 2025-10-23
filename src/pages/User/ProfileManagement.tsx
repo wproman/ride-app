@@ -1,287 +1,384 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// src/components/ProfileManagement.tsx
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 import { useChangePasswordMutation } from '@/redux/features/auth/auth.api';
 import { useGetProfileQuery, useUpdateProfileMutation } from '@/redux/features/user/profileApi';
+import { RootState } from '@/redux/store';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Check, Edit2, Loader2, X } from 'lucide-react';
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import * as z from 'zod';
+
+// Profile form validation schema
+const profileFormSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  phone: z.string().optional(),
+});
+
+type ProfileFormValues = z.infer<typeof profileFormSchema>;
+
+// Password form validation schema
+const passwordFormSchema = z.object({
+  oldPassword: z.string().min(1, 'Current password is required'),
+  newPassword: z.string().min(6, 'Password must be at least 6 characters'),
+  confirmPassword: z.string().min(1, 'Please confirm your password'),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+type PasswordFormValues = z.infer<typeof passwordFormSchema>;
 
 const ProfileManagement = () => {
+  const { user: authUser } = useSelector((state: RootState) => state.auth);
   const { data: response, isLoading } = useGetProfileQuery(undefined);
   const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
   
-  const user = response?.data;
-  
+  const profileUser = response?.data;
   const [editMode, setEditMode] = useState(false);
-  const [formData, setFormData] = useState({
-    name: user?.name || '',
-    phone: user?.phone || '',
+
+  // Profile form
+  const profileForm = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileFormSchema),
+    defaultValues: {
+      name: profileUser?.name || '',
+      phone: profileUser?.phone || '',
+    },
   });
 
   // Update form when user data loads
   React.useEffect(() => {
-    if (user) {
-      setFormData({
-        name: user.name || '',
-        phone: user.phone || '',
+    if (profileUser) {
+      profileForm.reset({
+        name: profileUser.name || '',
+        phone: profileUser.phone || '',
       });
     }
-  }, [user]);
+  }, [profileUser, profileForm]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onProfileSubmit = async (data: ProfileFormValues) => {
     try {
-      await updateProfile(formData).unwrap();
+      await updateProfile({
+        userId: authUser?.id || profileUser?._id,
+        profileData: data
+      }).unwrap();
       setEditMode(false);
-      // Show success message
-    } catch (error) {
-      // Handle error
-      
+    } catch (error: any) {
+      console.error('Failed to update profile:', error);
     }
+  };
+
+  const onProfileCancel = () => {
+    setEditMode(false);
+    profileForm.reset({
+      name: profileUser?.name || '',
+      phone: profileUser?.phone || '',
+    });
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading profile...</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-12 w-12 animate-spin mx-auto text-primary" />
+          <p className="text-muted-foreground">Loading profile...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow-sm border p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">Profile Management</h1>
-            {!editMode && (
-              <button
-                onClick={() => setEditMode(true)}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-              >
-                Edit Profile
-              </button>
-            )}
-          </div>
-
-          {editMode ? (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  value={user?.email || ''}
-                  disabled
-                  className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100 text-gray-500"
-                />
-                <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
-              </div>
-
-              <div className="flex space-x-3 pt-4">
-                <button
-                  type="submit"
-                  disabled={isUpdating}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
-                >
-                  {isUpdating ? 'Saving...' : 'Save Changes'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEditMode(false);
-                    setFormData({
-                      name: user?.name || '',
-                      phone: user?.phone || '',
-                    });
-                  }}
-                  className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          ) : (
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Name
-                </label>
-                <p className="text-gray-900">{user?.name}</p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email
-                </label>
-                <p className="text-gray-900">{user?.email}</p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone Number
-                </label>
-                <p className="text-gray-900">{user?.phone || 'Not provided'}</p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Role
-                </label>
-                <p className="text-gray-900 capitalize">{user?.role}</p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Account Status
-                </label>
-                <p className="text-gray-900 capitalize">
-                  {user?.isActive} • {user?.isVerified ? 'Verified' : 'Not Verified'}
-                </p>
-              </div>
+    <div className="min-h-screen bg-background p-6">
+      <div className="max-w-2xl mx-auto space-y-6">
+        {/* Profile Card */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+            <div>
+              <CardTitle className="text-2xl">Profile Management</CardTitle>
+              <CardDescription>
+                Manage your account settings and personal information
+              </CardDescription>
             </div>
-          )}
-        </div>
+            {!editMode && (
+              <Button 
+                onClick={() => setEditMode(true)}
+                variant="outline"
+                size="sm"
+                className="gap-2"
+              >
+                <Edit2 className="h-4 w-4" />
+                Edit Profile
+              </Button>
+            )}
+          </CardHeader>
+          <CardContent>
+            {editMode ? (
+              <Form {...profileForm}>
+                <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-6">
+                  <FormField
+                    control={profileForm.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Full Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter your full name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-        {/* Change Password Section */}
-        <div className="bg-white rounded-lg shadow-sm border p-6 mt-6">
-          <h2 className="text-xl font-bold mb-4">Change Password</h2>
-          <ChangePasswordForm />
-        </div>
+                  <FormField
+                    control={profileForm.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone Number</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter your phone number" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormItem>
+                    <FormLabel>Email Address</FormLabel>
+                    <FormControl>
+                      <Input 
+                        value={profileUser?.email || ''} 
+                        disabled 
+                        className="bg-muted"
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Email address cannot be changed
+                    </FormDescription>
+                  </FormItem>
+
+                  <div className="flex gap-3 pt-4">
+                    <Button 
+                      type="submit" 
+                      disabled={isUpdating}
+                      className="gap-2"
+                    >
+                      {isUpdating ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Check className="h-4 w-4" />
+                      )}
+                      Save Changes
+                    </Button>
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      onClick={onProfileCancel}
+                      className="gap-2"
+                    >
+                      <X className="h-4 w-4" />
+                      Cancel
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            ) : (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Full Name
+                    </label>
+                    <p className="text-lg font-medium">{profileUser?.name}</p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Email Address
+                    </label>
+                    <p className="text-lg font-medium">{profileUser?.email}</p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Phone Number
+                    </label>
+                    <p className="text-lg font-medium">
+                      {profileUser?.phone || 'Not provided'}
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Role
+                    </label>
+                    <Badge variant="secondary" className="capitalize">
+                      {profileUser?.role}
+                    </Badge>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-muted-foreground">
+                    Account Status
+                  </label>
+                  <div className="flex gap-2">
+                    <Badge variant={profileUser?.isActive ? "default" : "secondary"}>
+                      {profileUser?.isActive ? 'Active' : 'Inactive'}
+                    </Badge>
+                    <Badge variant={profileUser?.isVerified ? "default" : "outline"}>
+                      {profileUser?.isVerified ? 'Verified' : 'Not Verified'}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Change Password Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Change Password</CardTitle>
+            <CardDescription>
+              Update your password to keep your account secure
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChangePasswordForm />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
 };
 
-// Change Password Component
-// In your ChangePasswordForm component
+// Change Password Component with shadcn/ui
 const ChangePasswordForm = () => {
   const [changePassword, { isLoading, isSuccess }] = useChangePasswordMutation();
-  const [formData, setFormData] = useState({
-    oldPassword: '',       // Changed from currentPassword
-    newPassword: '',
-    confirmPassword: '',
+  
+  const form = useForm<PasswordFormValues>({
+    resolver: zodResolver(passwordFormSchema),
+    defaultValues: {
+      oldPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    },
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Validate passwords
-    if (!formData.oldPassword.trim() || !formData.newPassword.trim()) {
-      alert('Please fill in all password fields');
-      return;
-    }
-
-    if (formData.newPassword !== formData.confirmPassword) {
-      alert("New passwords don't match");
-      return;
-    }
-
-    if (formData.newPassword.length < 6) {
-      alert("New password must be at least 6 characters long");
-      return;
-    }
-
+  const onSubmit = async (data: PasswordFormValues) => {
     try {
       await changePassword({
-        oldPassword: formData.oldPassword,    // Changed from currentPassword
-        newPassword: formData.newPassword,
+        oldPassword: data.oldPassword,
+        newPassword: data.newPassword,
       }).unwrap();
       
-      // Reset form on success
-      setFormData({ oldPassword: '', newPassword: '', confirmPassword: '' });
-      
+      form.reset();
     } catch (error: any) {
       console.error('Password change failed:', error);
-      alert(error?.data?.message || 'Failed to change password');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Old Password
-        </label>
-        <input
-          type="password"
-          value={formData.oldPassword}
-          onChange={(e) => setFormData({ ...formData, oldPassword: e.target.value })}
-          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Enter your current password"
-          required
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="oldPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Current Password</FormLabel>
+              <FormControl>
+                <Input 
+                  type="password" 
+                  placeholder="Enter your current password" 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          New Password
-        </label>
-        <input
-          type="password"
-          value={formData.newPassword}
-          onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
-          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Enter new password (min 6 characters)"
-          minLength={6}
-          required
+        <FormField
+          control={form.control}
+          name="newPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>New Password</FormLabel>
+              <FormControl>
+                <Input 
+                  type="password" 
+                  placeholder="Enter new password (min 6 characters)" 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Confirm New Password
-        </label>
-        <input
-          type="password"
-          value={formData.confirmPassword}
-          onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Confirm your new password"
-          required
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm New Password</FormLabel>
+              <FormControl>
+                <Input 
+                  type="password" 
+                  placeholder="Confirm your new password" 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
 
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
-      >
-        {isLoading ? 'Changing Password...' : 'Change Password'}
-      </button>
+        <div className="flex gap-3 items-center">
+          <Button 
+            type="submit" 
+            disabled={isLoading}
+            className="gap-2"
+          >
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : null}
+            {isLoading ? 'Changing Password...' : 'Change Password'}
+          </Button>
 
-      {isSuccess && (
-        <p className="text-green-600 font-medium">Password changed successfully!</p>
-      )}
-    </form>
+          {isSuccess && (
+            <Badge variant="default" className="gap-1">
+              <Check className="h-3 w-3" />
+              Password changed successfully
+            </Badge>
+          )}
+        </div>
+      </form>
+    </Form>
   );
 };
 

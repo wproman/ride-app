@@ -14,15 +14,13 @@ export const profileApi = baseApi.injectEndpoints({
 
     // Update Profile (name, phone)
     updateProfile: builder.mutation({
-      query: (profileData: { name?: string; phone?: string }) => ({
-        url: "/user/profile/:id", 
+      query: ({ userId, profileData }: { userId: string; profileData: { name?: string; phone?: string } }) => ({
+        url: `/user/profile/${userId}`, 
         method: "PATCH",
         data: profileData,
       }),
       invalidatesTags: ["PROFILE"],
     }),
-
-  
   }),
 });
 
