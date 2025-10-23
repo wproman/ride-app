@@ -109,6 +109,7 @@ export const router = createBrowserRouter([
         path: '/driver/ride-details/:rideId',
         Component: RideDetails
       },
+      
     ],
   },
 
