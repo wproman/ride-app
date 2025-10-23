@@ -57,13 +57,13 @@ export const driverApi = baseApi.injectEndpoints({
       invalidatesTags: ["INCOMING_RIDES", "DRIVER"], // Invalidate both incoming rides and driver status
     }),
 
-    // Reject a ride
-    rejectRide: builder.mutation({
-      query: (rideId: string) => ({
-        url: `/driver/${rideId}/reject`,
-        method: "PATCH",
+   rejectRide: builder.mutation({
+      query: ({ rideId, reason }: { rideId: string; reason?: string }) => ({
+        url: `rides/${rideId}/reject`,
+        method: 'PATCH',
+        body: { reason },
       }),
-      invalidatesTags: ["INCOMING_RIDES"],
+      invalidatesTags: ['RIDE', 'INCOMING_RIDES'],
     }),
    
   }),
@@ -77,4 +77,5 @@ export const {
    useGetIncomingRidesQuery,
   useAcceptRideMutation,
   useRejectRideMutation
+
 } = driverApi;

@@ -47,14 +47,15 @@ export const riderApi = baseApi.injectEndpoints({
       providesTags: ["RIDE"],
     }),
 
-   cancelRide: builder.mutation({
-      query: (rideId: string) => ({
-        url: `rides/${rideId}/cancel`,
-        method: 'PATCH',
-      }),
-      invalidatesTags: ['RIDE'],
-    }),
- 
+  cancelRide: builder.mutation({
+  query: ({ rideId, reason }: { rideId: string; reason?: string }) => ({
+    url: `rides/${rideId}/cancel`,
+    method: 'PATCH',
+    body: { reason }, // Send reason in request body
+  }),
+  invalidatesTags: ['RIDE', 'ACTIVE-RIDE'],
+}),
+
   }),
 });
 
@@ -64,6 +65,7 @@ export const {
   useGetRideDetailsQuery,
   useGetMyRideHistoryQuery,
   useGetMyCurrentRideQuery,
-  
+  useCancelRideMutation,
+    // useRejectRideMutation
   
 } = riderApi;

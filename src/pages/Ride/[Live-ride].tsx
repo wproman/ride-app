@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Enhanced LiveRideTracking.tsx - Using Real API Data
-import { useGetMyCurrentRideQuery, useGetRideDetailsQuery } from "@/redux/features/ride/riderApi";
+import { useCancelRideMutation, useGetMyCurrentRideQuery, useGetRideDetailsQuery } from "@/redux/features/ride/riderApi";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
@@ -10,6 +11,9 @@ const LiveRideTracking = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const isDriver = user?.role === 'driver';
   
+  // Add cancel mutation
+  const [cancelRide, { isLoading: isCancelling }] = useCancelRideMutation();
+
   // If no rideId in URL, try to get current ride
   const { data: currentRideResponse } = useGetMyCurrentRideQuery(undefined, {
     skip: !!rideId // Skip this query if we already have a rideId
@@ -32,6 +36,28 @@ const LiveRideTracking = () => {
     { key: "completed", label: "Completed", color: "bg-gray-500" }
   ];
 
+  const handleCancelRide = async () => {
+
+    if (!ride?._id) return;
+         
+    try {
+        await cancelRide({ 
+      rideId: ride._id,
+      reason: undefined // or get from user input
+    }).unwrap();
+      console.log(ride._id)
+      // Show success message
+      alert('Ride cancelled successfully');
+      
+      // Redirect to appropriate page
+      navigate(isDriver ? '/driver/driver-dashboard' : '/rider');
+      
+    } catch (error: any) {
+      console.error('Failed to cancel ride:', error);
+      alert(error?.data?.message || 'Failed to cancel ride');
+    }
+  };
+
   // If no rideId and no current ride, show message
   if (!effectiveRideId && !isLoading) {
     return (
@@ -48,7 +74,7 @@ const LiveRideTracking = () => {
             }
           </p>
           <button 
-            onClick={() => navigate(isDriver ? '/driver/driver-dashboard' : '/rider/rider-dashboard')}
+            onClick={() => navigate(isDriver ? '/driver/driver-dashboard' : '/rider')}
             className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium"
           >
             Go to Dashboard
@@ -91,7 +117,7 @@ const LiveRideTracking = () => {
       <div className="bg-white p-4 shadow-sm border-b">
         <div className="flex items-center justify-between">
           <button 
-            onClick={() => navigate(isDriver ? '/driver/dashboard' : '/rider/dashboard')}
+            onClick={() => navigate(isDriver ? '/driver/driver-dashboard' : '/rider/rider-dashboard')}
             className="text-gray-600"
           >
             ← Back
@@ -263,10 +289,21 @@ const LiveRideTracking = () => {
           </button>
         )}
 
-        {/* Rider Specific Actions */}
+        {/* Rider Specific Actions - Fixed Cancel Button */}
         {!isDriver && ride.rideStatus !== 'completed' && ride.rideStatus !== 'cancelled' && (
-          <button className="w-full bg-red-500 hover:bg-red-600 text-white py-4 rounded-lg font-medium">
-            Cancel Ride
+          <button 
+            onClick={handleCancelRide}
+            disabled={isCancelling}
+            className="w-full bg-red-500 hover:bg-red-600 text-white py-4 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isCancelling ? (
+              <span className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Cancelling...
+              </span>
+            ) : (
+              'Cancel Ride'
+            )}
           </button>
         )}
 
