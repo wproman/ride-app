@@ -31,18 +31,19 @@ interface RideRequest {
 }
 
 const IncomingRides = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const { data: ridesResponse, isLoading, error, refetch } = useGetIncomingRidesQuery(undefined);
   const [acceptRide, { isLoading: isAccepting }] = useAcceptRideMutation();
   const [rejectRide, { isLoading: isRejecting }] = useRejectRideMutation();
   
   const [selectedRide, setSelectedRide] = useState<string | null>(null);
   const [timeRemaining, setTimeRemaining] = useState<{ [key: string]: number }>({});
+  const [removedRides, setRemovedRides] = useState<Set<string>>(new Set()); // Track removed rides
 
-  // Use useMemo to prevent unnecessary re-renders
+  // Filter out removed rides
   const incomingRides: RideRequest[] = useMemo(() => 
-    ridesResponse?.data || [], 
-    [ridesResponse?.data]
+    ridesResponse?.data?.filter((ride: RideRequest) => !removedRides.has(ride._id)) || [], 
+    [ridesResponse?.data, removedRides]
   );
 
   // Auto-refresh every 10 seconds
@@ -79,38 +80,59 @@ const IncomingRides = () => {
     });
 
     return () => timers.forEach(timer => clearInterval(timer));
-  }, [incomingRides]); // Now this dependency is stable
+  }, [incomingRides]);
 
-  // In IncomingRides.tsx - redirect to the shared component
-const handleAcceptRide = async (rideId: string) => {
+ const handleAcceptRide = async (rideId: string) => {
   try {
     setSelectedRide(rideId);
-     await acceptRide(rideId).unwrap();
-   
+    // Immediately remove from UI to prevent double acceptance
+    setRemovedRides(prev => new Set(prev).add(rideId));
     
-    // Redirect to shared live tracking (it will detect user role)
+    await acceptRide(rideId).unwrap(); // ✅ Make sure this matches your API definition
+    
+    // Redirect to live ride tracking
     navigate(`/live-ride/${rideId}`);
     
   } catch (error: any) {
     console.error('Failed to accept ride:', error);
+    // Add back to UI if there was an error
+    setRemovedRides(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(rideId);
+      return newSet;
+    });
     alert(error?.data?.message || 'Failed to accept ride');
   } finally {
     setSelectedRide(null);
   }
 };
 
-  const handleRejectRide = async (rideId: string) => {
-    try {
-      setSelectedRide(rideId);
-      await rejectRide(rideId).unwrap();
-       
-    } catch (error: any) {
-      console.error('Failed to reject ride:', error);
-      alert(error?.data?.message || 'Failed to reject ride');
-    } finally {
-      setSelectedRide(null);
-    }
-  };
+const handleRejectRide = async (rideId: string) => {
+  try {
+    setSelectedRide(rideId);
+    
+    // Optional: Ask for rejection reason
+    const reason = window.prompt('Reason for rejection (optional):') || undefined;
+    
+    // Immediately remove from UI
+    setRemovedRides(prev => new Set(prev).add(rideId));
+    
+    await rejectRide({ rideId, reason }).unwrap(); // ✅ Pass object with rideId and reason
+    console.log('✅ Ride rejected successfully');
+    
+  } catch (error: any) {
+    console.error('Failed to reject ride:', error);
+    // Add back to UI if there was an error
+    setRemovedRides(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(rideId);
+      return newSet;
+    });
+    alert(error?.data?.message || 'Failed to reject ride');
+  } finally {
+    setSelectedRide(null);
+  }
+};
 
   const formatTime = (ms: number) => {
     const seconds = Math.floor(ms / 1000);
@@ -161,7 +183,7 @@ const handleAcceptRide = async (rideId: string) => {
 
         {/* Ride Requests List */}
         <div className="space-y-4">
-          {incomingRides.map((ride) => {
+          {incomingRides.map((ride:RideRequest) => {
             const remainingTime = timeRemaining[ride._id] || 30000;
             const progress = (remainingTime / 30000) * 100;
             const isExpiring = remainingTime < 10000;

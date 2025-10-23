@@ -105,7 +105,10 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/driver/driver-dashboard" /> },
       ...generateRoutes(driverSidebarItems),
-
+{
+        path: '/driver/ride-details/:rideId',
+        Component: RideDetails
+      },
     ],
   },
 
