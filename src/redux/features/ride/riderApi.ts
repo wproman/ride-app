@@ -55,7 +55,15 @@ export const riderApi = baseApi.injectEndpoints({
   }),
   invalidatesTags: ['RIDE', 'ACTIVE-RIDE'],
 }),
-
+ // Update Ride Status (ADDED)
+    updateRideStatus: builder.mutation({
+      query: ({ rideId, status }: { rideId: string; status: string }) => ({
+        url: `/rides/${rideId}/status`,
+        method: 'PATCH',
+        body: { status },
+      }),
+      invalidatesTags: ['RIDE', 'ACTIVE-RIDE'],
+    }),
   }),
 });
 
@@ -66,6 +74,6 @@ export const {
   useGetMyRideHistoryQuery,
   useGetMyCurrentRideQuery,
   useCancelRideMutation,
-    // useRejectRideMutation
+    useUpdateRideStatusMutation
   
 } = riderApi;

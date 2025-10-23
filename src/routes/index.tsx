@@ -30,7 +30,9 @@ import { adminSidebarItems } from "./adminSidebarItems";
 import { role } from "@/constance/role";
 import AccountStatus from "@/pages/auth/AccountStatus";
 // import DriverLiveRide from "@/pages/Driver/DriverLiveRide";
+import DriverLiveRide from "@/pages/Driver/DriverLiveRide";
 import Home from "@/pages/Home";
+import LiveRideTracking from "@/pages/Ride/[Live-ride]";
 import RideDetails from "@/pages/Ride/RideDetails";
 import Unauthorized from "@/pages/Unauthorized";
 import { riderSidebarItems } from '@/routes/riderSidebarItems';
@@ -97,6 +99,10 @@ export const router = createBrowserRouter([
         path: '/rider/ride-details/:rideId',
         Component: RideDetails
       },
+      {
+        path: '/rider/live-ride/:rideId',
+        Component: LiveRideTracking
+      },
     ],
   },
    {
@@ -109,7 +115,10 @@ export const router = createBrowserRouter([
         path: '/driver/ride-details/:rideId',
         Component: RideDetails
       },
-      
+      {
+        path: '/driver/live-ride/:rideId',
+        Component: DriverLiveRide
+      },
     ],
   },
 

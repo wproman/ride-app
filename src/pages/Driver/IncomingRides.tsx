@@ -91,7 +91,7 @@ const IncomingRides = () => {
     await acceptRide(rideId).unwrap(); // ✅ Make sure this matches your API definition
     
     // Redirect to live ride tracking
-    navigate(`/driver/ride-details/${rideId}`);
+    navigate(`/driver/live-ride/${rideId}`);
     
   } catch (error: any) {
     console.error('Failed to accept ride:', error);

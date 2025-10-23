@@ -1,9 +1,9 @@
 
 // import Status from "@/pages/Driver/Status";
 import DriverDashboard from "@/pages/Driver/DriverDashboard";
+import DriverLiveRide from "@/pages/Driver/DriverLiveRide";
 import EarningsDashboard from "@/pages/Driver/EarningsDashboard";
 import IncomingRides from "@/pages/Driver/IncomingRides";
-import LiveRideTracking from "@/pages/Ride/[Live-ride]";
 import RideHistory from "@/pages/Ride/RideHistory";
 import { ISidebarItem } from "@/types";
 
@@ -38,8 +38,8 @@ export const driverSidebarItems : ISidebarItem[]= [
         {
         
         title: "Live Tracking", // This will handle both cases
-        url: "/driver/live-tracking", // Changed from /rider/live-ride/:rideId
-        component: LiveRideTracking // Your enhanced component
+        url: "/driver/live-ride", // Changed from /rider/live-ride/:rideId
+        component: DriverLiveRide // Your enhanced component
       },
       ],
     },
