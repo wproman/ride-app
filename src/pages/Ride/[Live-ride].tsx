@@ -37,16 +37,20 @@ const LiveRideTracking = () => {
   ];
 
   const handleCancelRide = async () => {
-    if (!ride?._id) return;
 
+    if (!ride?._id) return;
+         
     try {
-      await cancelRide(ride._id).unwrap();
-      
+        await cancelRide({ 
+      rideId: ride._id,
+      reason: undefined // or get from user input
+    }).unwrap();
+      console.log(ride._id)
       // Show success message
       alert('Ride cancelled successfully');
       
       // Redirect to appropriate page
-      navigate(isDriver ? '/driver/driver-dashboard' : '/rider/rider-dashboard');
+      navigate(isDriver ? '/driver/driver-dashboard' : '/rider');
       
     } catch (error: any) {
       console.error('Failed to cancel ride:', error);
@@ -70,7 +74,7 @@ const LiveRideTracking = () => {
             }
           </p>
           <button 
-            onClick={() => navigate(isDriver ? '/driver/driver-dashboard' : '/rider/rider-dashboard')}
+            onClick={() => navigate(isDriver ? '/driver/driver-dashboard' : '/rider')}
             className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium"
           >
             Go to Dashboard

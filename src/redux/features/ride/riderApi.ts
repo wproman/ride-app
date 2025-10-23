@@ -55,15 +55,7 @@ export const riderApi = baseApi.injectEndpoints({
   }),
   invalidatesTags: ['RIDE', 'ACTIVE-RIDE'],
 }),
-   // Reject a ride
-  //  rejectRide: builder.mutation({
-  //     query: ({ rideId, reason }: { rideId: string; reason?: string }) => ({
-  //       url: `rides/${rideId}/reject`,
-  //       method: 'PATCH',
-  //       body: { reason },
-  //     }),
-  //     invalidatesTags: ['RIDE', 'INCOMING_RIDES'],
-  //   }),
+
   }),
 });
 
