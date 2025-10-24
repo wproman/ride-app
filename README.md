@@ -106,33 +106,33 @@ Admin: Manage users, monitor platform activity, handle disputes
        git clone https://github.com/your-username/ride-share-app.git
       cd ride-share-app
 2. Backend Setup
-```bash
-# Navigate to backend directory
-cd backend
+    ```bash
+    # Navigate to backend directory
+      cd backend
 
-# Install dependencies
-npm install
+    # Install dependencies
+      npm install
 
-# Environment configuration
-cp .env.example .env
-Configure your .env file:
+    # Environment configuration
+      cp .env.example .env
+      Configure your .env file:
+      env
+      NODE_ENV=development
+      PORT=5000
+      MONGODB_URI=mongodb://localhost:27017/ride-share
+      JWT_SECRET=your-super-secret-jwt-key
+      JWT_EXPIRES_IN=7d
+      BCRYPT_SALT_ROUNDS=12
+      CLIENT_URL=http://localhost:5173
+      
+  ```bash
+     # Start development server
+      npm run dev
 
-env
-NODE_ENV=development
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/ride-share
-JWT_SECRET=your-super-secret-jwt-key
-JWT_EXPIRES_IN=7d
-BCRYPT_SALT_ROUNDS=12
-CLIENT_URL=http://localhost:5173
-bash
-# Start development server
-npm run dev
-
-# Or build and start production
-npm run build
-npm start
-3. Frontend Setup
+      # Or build and start production
+      npm run build
+      npm start
+      3. Frontend Setup
 bash
 # Navigate to frontend directory
 cd frontend
