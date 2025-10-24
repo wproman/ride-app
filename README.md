@@ -133,28 +133,28 @@ Admin: Manage users, monitor platform activity, handle disputes
       npm run build
       npm start
       3. Frontend Setup
-bash
-# Navigate to frontend directory
-cd frontend
+  ```bash
+    # Navigate to frontend directory
+    cd frontend
 
-# Install dependencies
-npm install
+    # Install dependencies
+    npm install
 
-# Environment configuration
-cp .env.example .env
-Configure your .env file:
+    # Environment configuration
+    cp .env.example .env
+    Configure your .env file:
 
-env
-VITE_API_BASE_URL=http://localhost:5000/api/v1
-VITE_APP_NAME=RideShare
-bash
-# Start development server
-npm run dev
+    env
+    VITE_API_BASE_URL=http://localhost:5000/api/v1
+    VITE_APP_NAME=RideShare
+    bash
+    # Start development server
+    npm run dev
 
-# Build for production
-npm run build
-4. Database Setup
-The application will automatically create necessary collections. Ensure your MongoDB instance is running.
+      # Build for production
+      npm run build
+      4. Database Setup
+      The application will automatically create necessary collections. Ensure your MongoDB instance is running.
 
 📁 Project Structure
 text
