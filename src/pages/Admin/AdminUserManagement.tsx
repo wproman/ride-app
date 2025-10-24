@@ -1,4 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   useApproveDriverMutation,
   useBlockUserMutation,
@@ -6,10 +24,10 @@ import {
   useUnblockUserMutation
 } from "@/redux/features/admin/adminApi";
 import { useState } from "react";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 
 const AdminUserManagement = () => {
-    const [approvingDriverId, setApprovingDriverId] = useState<string | null>(null);
+  const [approvingDriverId, setApprovingDriverId] = useState<string | null>(null);
   const { data: users, isLoading, refetch } = useGetAllUsersQuery({});
   const [blockUser] = useBlockUserMutation();
   const [unblockUser] = useUnblockUserMutation();
@@ -34,7 +52,8 @@ const AdminUserManagement = () => {
       toast.error(err?.data?.message || "Failed to unblock user");
     }
   };
- const handleApproveDriver = async (id: string, status: string) => {
+
+  const handleApproveDriver = async (id: string, status: string) => {
     setApprovingDriverId(id);
     
     try {
@@ -54,157 +73,152 @@ const AdminUserManagement = () => {
     }
   };
 
-
   if (isLoading) return (
-    <div className="p-6">
-      <div className="animate-pulse">
-        <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
-        <div className="h-64 bg-gray-200 rounded"></div>
-      </div>
+    <div className="p-6 space-y-4">
+      <Skeleton className="h-8 w-64" />
+      <Card>
+        <CardContent className="p-6">
+          <div className="space-y-3">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-3/4" />
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6">User Management</h2>
-
-      <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-        <table className="min-w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                User Info
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Role & Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {users?.data?.map((user: any) => (
-              <tr key={user._id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">
-                        {user.name}
-                      </div>
-                      <div className="text-sm text-gray-500">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">User Management</CardTitle>
+          <CardDescription>
+            Manage user accounts, permissions, and driver approvals
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>User Info</TableHead>
+                <TableHead>Role & Status</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {users?.data?.map((user: any) => (
+                <TableRow key={user._id}>
+                  <TableCell>
+                    <div className="flex flex-col space-y-1">
+                      <div className="font-medium">{user.name}</div>
+                      <div className="text-sm text-muted-foreground">
                         {user.email}
                       </div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-muted-foreground">
                         {user.phone || 'No phone'}
                       </div>
                     </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="space-y-2">
-                    <div>
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        user.role === 'admin' ? 'bg-purple-100 text-purple-800' :
-                        user.role === 'driver' ? 'bg-blue-100 text-blue-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
-                        {user.role}
-                      </span>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-col space-y-2">
+                      <div className="flex flex-wrap gap-2">
+                        <Badge variant={
+                          user.role === 'admin' ? 'default' :
+                          user.role === 'driver' ? 'secondary' : 'outline'
+                        }>
+                          {user.role}
+                        </Badge>
+                        <Badge variant={user.isBlocked ? "destructive" : "default"}>
+                          {user.isBlocked ? "Blocked" : "Active"}
+                        </Badge>
+                        <Badge variant={user.isVerified ? "default" : "secondary"}>
+                          {user.isVerified ? "Verified" : "Unverified"}
+                        </Badge>
+                        {user.role === "driver" && (
+                          <Badge variant={
+                            user.driver?.approvalStatus === 'approved' ? 'default' :
+                            user.driver?.approvalStatus === 'pending' ? 'secondary' :
+                            user.driver?.approvalStatus === 'rejected' ? 'destructive' : 'outline'
+                          }>
+                            {user.driver?.approvalStatus || 'Pending'}
+                          </Badge>
+                        )}
+                      </div>
                     </div>
-                    <div className="flex flex-wrap gap-1">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        user.isBlocked ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-                      }`}>
-                        {user.isBlocked ? "Blocked" : "Active"}
-                      </span>
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        user.isVerified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                      }`}>
-                        {user.isVerified ? "Verified" : "Unverified"}
-                      </span>
-                     {user.role === "driver" && (
-  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-    user.driver?.approvalStatus === 'approved' ? 'bg-green-100 text-green-800' :
-    user.driver?.approvalStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-    user.driver?.approvalStatus === 'rejected' ? 'bg-red-100 text-red-800' :
-    'bg-gray-100 text-gray-800'
-  }`}>
-    {user.driver?.approvalStatus || 'Pending'}
-  </span>
-)}
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <div className="flex flex-col space-y-2">
-                    {/* Driver Approval Actions */}
-
-                    {user.role === "driver" && (
-  <div className="flex space-x-2">
-    {user.driver?.approvalStatus !== 'approved' && (
-      <button
-        onClick={() => handleApproveDriver(user._id, "approved")}
-        disabled={isApproving && approvingDriverId === user._id}
-        className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
-      >
-        {(isApproving && approvingDriverId === user.driver?._id) ? "Approving..." : "Approve"}
-      </button>
-    )}
-    {user.driver?.approvalStatus !== 'rejected' && user.driver?.approvalStatus !== 'approved' && (
-      <button
-        onClick={() => handleApproveDriver(user.driver?._id, "rejected")}
-        disabled={isApproving && approvingDriverId === user.driver?._id}
-        className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
-      >
-        Reject
-      </button>
-    )}
-    {user.driver?.approvalStatus === 'approved' && (
-      <span className="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded">
-        Approved
-      </span>
-    )}
-    {user.driver?.approvalStatus === 'rejected' && (
-      <span className="inline-flex items-center px-2 py-1 text-xs font-medium text-red-800 bg-red-100 rounded">
-        Rejected
-      </span>
-    )}
-  </div>
-)}
-                   
-
-                    {/* Block/Unblock Actions */}
-                    <div className="flex space-x-2">
-                      {!user.isBlocked ? (
-                        <button
-                          onClick={() => handleBlock(user._id)}
-                          className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                        >
-                          Block User
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => handleUnblock(user._id)}
-                          className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-                        >
-                          Unblock User
-                        </button>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex flex-col space-y-2 items-end">
+                      {/* Driver Approval Actions */}
+                      {user.role === "driver" && (
+                        <div className="flex space-x-2">
+                          {user.driver?.approvalStatus !== 'approved' && (
+                            <Button
+                              onClick={() => handleApproveDriver(user._id, "approved")}
+                              disabled={isApproving && approvingDriverId === user._id}
+                              size="sm"
+                              variant="default"
+                            >
+                              {(isApproving && approvingDriverId === user.driver?._id) ? "Approving..." : "Approve"}
+                            </Button>
+                          )}
+                          {user.driver?.approvalStatus !== 'rejected' && user.driver?.approvalStatus !== 'approved' && (
+                            <Button
+                              onClick={() => handleApproveDriver(user.driver?._id, "rejected")}
+                              disabled={isApproving && approvingDriverId === user.driver?._id}
+                              size="sm"
+                              variant="destructive"
+                            >
+                              Reject
+                            </Button>
+                          )}
+                          {user.driver?.approvalStatus === 'approved' && (
+                            <Badge variant="default" className="px-3 py-1">
+                              Approved
+                            </Badge>
+                          )}
+                          {user.driver?.approvalStatus === 'rejected' && (
+                            <Badge variant="destructive" className="px-3 py-1">
+                              Rejected
+                            </Badge>
+                          )}
+                        </div>
                       )}
+
+                      {/* Block/Unblock Actions */}
+                      <div className="flex space-x-2">
+                        {!user.isBlocked ? (
+                          <Button
+                            onClick={() => handleBlock(user._id)}
+                            size="sm"
+                            variant="destructive"
+                          >
+                            Block User
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={() => handleUnblock(user._id)}
+                            size="sm"
+                            variant="secondary"
+                          >
+                            Unblock User
+                          </Button>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        
-        {(!users?.data || users.data.length === 0) && (
-          <div className="text-center py-8">
-            <p className="text-gray-500">No users found</p>
-          </div>
-        )}
-      </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          
+          {(!users?.data || users.data.length === 0) && (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">No users found</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };

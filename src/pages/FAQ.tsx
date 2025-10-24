@@ -1,8 +1,14 @@
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
+import { HelpCircle, Mail, Phone, Search } from 'lucide-react';
 import React, { useState } from 'react';
 
 const FAQ: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('general');
-  const [openItems, setOpenItems] = useState<number[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   const categories = {
@@ -76,134 +82,195 @@ const FAQ: React.FC = () => {
     }
   ];
 
-  const toggleItem = (id: number) => {
-    setOpenItems(prev => 
-      prev.includes(id) 
-        ? prev.filter(item => item !== id)
-        : [...prev, id]
-    );
-  };
-
   const filteredItems = faqItems.filter(item => 
     item.category === activeCategory && 
     (item.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
      item.answer.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
+  const popularQuestions = faqItems.filter(item => 
+    [1, 3, 7, 9].includes(item.id)
+  );
+
   return (
-    <div className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+        <div className="text-center mb-12 space-y-6">
+          <div className="flex justify-center mb-4">
+            <Badge variant="secondary" className="px-4 py-2 text-sm">
+              <HelpCircle className="h-4 w-4 mr-2" />
+              Help Center
+            </Badge>
+          </div>
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
             Frequently Asked Questions
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Find quick answers to common questions about RideShare. Can't find what you're looking for? 
-            <a href="/contact" className="text-blue-600 hover:text-blue-700 ml-1 font-semibold">Contact our support team.</a>
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Find quick answers to common questions about RideShare. Can't find what you're looking for?{' '}
+            <a href="/contact" className="text-primary hover:underline font-semibold">
+              Contact our support team.
+            </a>
           </p>
         </div>
 
-        {/* Search Bar */}
-        <div className="max-w-2xl mx-auto mb-12">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search questions or answers..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-6 py-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors shadow-sm"
-            />
-            <span className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400">
-              🔍
-            </span>
-          </div>
-        </div>
+        {/* Popular Questions */}
+        <Card className="mb-8">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl">Popular Questions</CardTitle>
+            <CardDescription>
+              Quick answers to our most frequently asked questions
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Accordion type="single" collapsible className="space-y-4">
+              {popularQuestions.map((item) => (
+                <AccordionItem key={item.id} value={`item-${item.id}`} className="border rounded-lg px-6">
+                  <AccordionTrigger className="hover:no-underline hover:bg-muted/50 px-0 py-4">
+                    <div className="flex items-start space-x-4 text-left">
+                      <Badge variant="outline" className="shrink-0 mt-1">
+                        {categories[item.category as keyof typeof categories]}
+                      </Badge>
+                      <span className="font-semibold text-base">{item.question}</span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-0 pb-4">
+                    <Separator className="mb-4" />
+                    <p className="text-muted-foreground leading-relaxed">{item.answer}</p>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </CardContent>
+        </Card>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Categories */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Categories Sidebar - Fixed */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl p-6 shadow-lg sticky top-24">
-              <h3 className="font-bold text-gray-900 mb-4">Categories</h3>
-              <div className="space-y-2">
-                {Object.entries(categories).map(([key, label]) => (
-                  <button
-                    key={key}
-                    onClick={() => setActiveCategory(key)}
-                    className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
-                      activeCategory === key
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
+            <div className="space-y-4 lg:sticky lg:top-24">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">Categories</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 pt-0">
+                  {Object.entries(categories).map(([key, label]) => (
+                    <Button
+                      key={key}
+                      onClick={() => setActiveCategory(key)}
+                      variant={activeCategory === key ? "default" : "ghost"}
+                      className="w-full justify-start h-11"
+                    >
+                      {label}
+                    </Button>
+                  ))}
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">Search</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search questions..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 h-11"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
 
-          {/* FAQ Items */}
+          {/* FAQ Items Main Content - Scrollable */}
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-              {filteredItems.length > 0 ? (
-                filteredItems.map((item) => (
-                  <div key={item.id} className="border-b border-gray-100 last:border-b-0">
-                    <button
-                      onClick={() => toggleItem(item.id)}
-                      className="w-full text-left p-6 hover:bg-gray-50 transition-colors focus:outline-none focus:bg-gray-50"
-                    >
-                      <div className="flex justify-between items-center">
-                        <h3 className="text-lg font-semibold text-gray-900 pr-4">
-                          {item.question}
-                        </h3>
-                        <span className={`transform transition-transform ${
-                          openItems.includes(item.id) ? 'rotate-180' : ''
-                        }`}>
-                          ▼
-                        </span>
-                      </div>
-                      {openItems.includes(item.id) && (
-                        <div className="mt-4 text-gray-600 leading-relaxed">
-                          {item.answer}
-                        </div>
-                      )}
-                    </button>
-                  </div>
-                ))
-              ) : (
-                <div className="p-12 text-center">
-                  <div className="text-4xl mb-4">🤔</div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    No questions found
-                  </h3>
-                  <p className="text-gray-600">
-                    Try adjusting your search or browse different categories.
-                  </p>
-                </div>
-              )}
-            </div>
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-xl">
+                    {categories[activeCategory as keyof typeof categories]}
+                    <Badge variant="secondary">
+                      {filteredItems.length} {filteredItems.length === 1 ? 'question' : 'questions'}
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                  {filteredItems.length > 0 ? (
+                    <Accordion type="multiple" className="w-full">
+                      {filteredItems.map((item) => (
+                        <AccordionItem 
+                          key={item.id} 
+                          value={`item-${item.id}`} 
+                          className="px-6 border-b last:border-b-0"
+                        >
+                          <AccordionTrigger className="py-4 hover:no-underline text-left">
+                            <div className="flex flex-col items-start space-y-2">
+                              <h3 className="font-semibold text-base">{item.question}</h3>
+                              <Badge variant="outline" className="text-xs">
+                                {categories[item.category as keyof typeof categories]}
+                              </Badge>
+                            </div>
+                          </AccordionTrigger>
+                          <AccordionContent className="pb-4">
+                            <Separator className="mb-4" />
+                            <p className="text-muted-foreground leading-relaxed">{item.answer}</p>
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
+                  ) : (
+                    <div className="text-center py-12">
+                      <HelpCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold mb-2">No questions found</h3>
+                      <p className="text-muted-foreground mb-4">
+                        Try adjusting your search or browse different categories.
+                      </p>
+                      <Button onClick={() => setSearchTerm('')}>
+                        Clear Search
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
 
-            {/* Support CTA */}
-            <div className="mt-8 bg-gradient-to-r from-blue-600 to-purple-700 rounded-2xl p-8 text-white text-center">
-              <h3 className="text-2xl font-bold mb-4">Still need help?</h3>
-              <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-                Our support team is available 24/7 to assist you with any questions or concerns.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a 
-                  href="/contact" 
-                  className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-                >
-                  Contact Support
-                </a>
-                <a 
-                  href="tel:+15551234567" 
-                  className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
-                >
-                  Call Now
-                </a>
-              </div>
+              {/* Support CTA */}
+              <Card className="bg-gradient-to-r from-primary to-purple-600 border-0">
+                <CardContent className="p-6 text-white text-center">
+                  <div className="max-w-2xl mx-auto">
+                    <h3 className="text-xl font-bold mb-3">Still need help?</h3>
+                    <p className="text-white/80 mb-4">
+                      Our support team is available 24/7 to assist you with any questions or concerns.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                      <Button 
+                        variant="secondary" 
+                        size="sm"
+                        className="bg-white text-primary hover:bg-white/90"
+                        asChild
+                      >
+                        <a href="/contact">
+                          <Mail className="h-4 w-4 mr-2" />
+                          Contact Support
+                        </a>
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="border-white text-white hover:bg-white hover:text-primary"
+                        asChild
+                      >
+                        <a href="tel:+15551234567">
+                          <Phone className="h-4 w-4 mr-2" />
+                          Call Now
+                        </a>
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
