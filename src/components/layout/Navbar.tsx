@@ -31,8 +31,7 @@ import {
   LogOut,
   Settings,
   Shield,
-  User,
-  Zap
+  User
 } from "lucide-react"
 import { Link, useNavigate } from "react-router"
 import { ModeToggle } from "./Mode.toggler"
@@ -299,12 +298,12 @@ export default function Navbar() {
           {/* Quick Actions for Public Users */}
           {!isAuthenticated && !isLoading && (
             <div className="hidden md:flex items-center gap-2">
-              <Button asChild variant="ghost" size="sm">
+              {/* <Button asChild variant="ghost" size="sm">
                 <Link to="/download" className="flex items-center gap-1">
                   <Zap className="h-4 w-4" />
                   Download App
                 </Link>
-              </Button>
+              </Button> */}
             </div>
           )}
 
@@ -328,20 +327,20 @@ export default function Navbar() {
               <div className="hidden md:flex items-center gap-2">
                 {userRole === role.RIDER && (
                   <Button asChild size="sm" className="flex items-center gap-1">
-                    <Link to="/book-ride">
+                    <Link to="/rider/ride-request">
                       <Car className="h-4 w-4" />
                       Book Ride
                     </Link>
                   </Button>
                 )}
-                {userRole === role.DRIVER && (
+                {/* {userRole === role.DRIVER && (
                   <Button asChild variant="outline" size="sm" className="flex items-center gap-1">
                     <Link to="/driver/go-online">
                       <Zap className="h-4 w-4" />
                       Go Online
                     </Link>
                   </Button>
-                )}
+                )} */}
               </div>
 
               {/* User dropdown menu */}
