@@ -35,6 +35,8 @@ import Home from "@/pages/Home";
 import LiveRideTracking from "@/pages/Ride/[Live-ride]";
 import RideDetails from "@/pages/Ride/RideDetails";
 import Unauthorized from "@/pages/Unauthorized";
+import DriverFeatures from "@/pages/User/Features/FeatureDriver";
+import RiderFeatures from "@/pages/User/Features/FeaturesRider";
 import { riderSidebarItems } from '@/routes/riderSidebarItems';
 import { TRole } from "@/types";
 import { withAuth } from "@/utils/withAuth";
@@ -146,5 +148,17 @@ export const router = createBrowserRouter([
   //   Component: Fail,
   //   path: "/payment/fail",
   // },
+  {
+    Component: RiderFeatures,
+    path: "features/rider", 
+
+  },
+
+    {
+    Component: DriverFeatures,
+    path: "features/driver", 
+
+  },
+
     
 ]);

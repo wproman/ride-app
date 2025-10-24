@@ -21,11 +21,20 @@ export const profileApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["PROFILE"],
     }),
+updateEmergencyContacts: builder.mutation({
+  query: (contactsData) => ({
+    url: '/user/emergency-contacts',
+    method: 'PATCH',
+    body: contactsData,
+  }),
+  invalidatesTags: ['PROFILE'],
+}),
+
   }),
 });
 
 export const {
   useGetProfileQuery,
   useUpdateProfileMutation,
-//   useChangePasswordMutation,
+  useUpdateEmergencyContactsMutation
 } = profileApi;

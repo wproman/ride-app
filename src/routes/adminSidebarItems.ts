@@ -1,6 +1,7 @@
 // import Analytics from "@/pages/Admin/Analytics";
 import AdminUserManagement from "@/pages/Admin/AdminUserManagement";
 import RideManagement from "@/pages/Admin/RideManangment";
+import ProfileManagement from "@/pages/User/ProfileManagement";
 import { ISidebarItem } from "@/types";
 import { lazy } from "react";
 const Analytics = lazy(()=>
@@ -28,7 +29,11 @@ export const adminSidebarItems : ISidebarItem[]= [
           url: "/admin/ride-ovrsight",
           component: RideManagement
         },
-         
+        {
+          title: "Profile",
+    url: "/admin/profile",
+    component: ProfileManagement
+  },
       ],
     },
     

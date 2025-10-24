@@ -1,69 +1,83 @@
-# React + TypeScript + Vite
+# 🚖 RideShare - Full Stack Ride Hailing Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A complete ride-hailing platform (like Uber/Pathao) built with React, TypeScript, Node.js, and MongoDB. Features real-time ride tracking, secure payments, and role-based access for riders, drivers, and admins.
 
-Currently, two official plugins are available:
+## 🚀 Live Deployment
+**Frontend:** [https://your-rideshare-app.vercel.app](https://your-rideshare-app.vercel.app)  
+**Backend API:** [https://b5-5.vercel.app/](https://b5-5.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📖 Project Overview
+RideShare is a full-stack ride-hailing application similar to Uber, built with modern web technologies. The platform connects riders with drivers, providing real-time ride tracking, secure payments, and a seamless user experience for both parties.
 
-## Expanding the ESLint configuration
+### Key User Roles:
+- **Riders**: Book rides, track drivers in real-time, make payments
+- **Drivers**: Accept ride requests, navigate to destinations, manage earnings
+- **Admin**: Manage users, monitor platform activity, handle disputes
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## ✨ Project Features
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 🚗 Ride Management
+- **Real-time Ride Requests**: Drivers receive incoming ride requests with 30-second acceptance timer
+- **Live Tracking**: Real-time ride tracking for both riders and drivers
+- **Ride Status Updates**: Requested → Accepted → Picked Up → Completed
+- **Ride History**: Complete history for both riders and drivers
+- **Cancellation System**: Both riders and drivers can cancel with reason tracking
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### 👤 User Features
+- **Dual Role System**: Single platform for both riders and drivers
+- **Profile Management**: Update personal information and preferences
+- **Secure Authentication**: JWT-based authentication system
+- **Rating System**: Rate rides and provide feedback
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 💰 Payment & Pricing
+- **Fare Calculation**: Dynamic pricing based on distance
+- **Payment Status Tracking**: Pending, Paid, Refunded states
+- **Secure Transactions**: Integrated payment processing
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 🎯 Driver Features
+- **Incoming Ride Dashboard**: See nearby ride requests
+- **Accept/Reject System**: Smart ride acceptance with timeout
+- **Earnings Tracking**: Monitor completed rides and earnings
+- **Navigation Integration**: Built-in navigation to pickup/dropoff locations
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🛠 Technology Stack
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Frontend
+- **React 18** - Modern React with hooks
+- **TypeScript** - Type-safe development
+- **Redux Toolkit** - State management
+- **RTK Query** - API data fetching and caching
+- **React Router** - Client-side routing
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - Modern UI component library
+- **React Hook Form** - Form handling with validation
+- **Zod** - Schema validation
+
+### Backend
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **TypeScript** - Type safety
+- **MongoDB** - NoSQL database
+- **Mongoose** - MongoDB object modeling
+- **JWT** - Authentication tokens
+- **bcryptjs** - Password hashing
+- **CORS** - Cross-origin resource sharing
+
+### Development & Deployment
+- **Vite** - Fast build tool and dev server
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **Vercel** - Frontend deployment
+- **Vercel** - Backend deployment
+
+## 🚀 Setup Instructions
+
+### Prerequisites
+- Node.js 18+ 
+- MongoDB (local or cloud)
+- Git
+
+### 1. Clone the Repository
+```bash
+git https://github.com/wproman/ride-app.git
+cd ride-app
