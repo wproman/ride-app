@@ -1,6 +1,5 @@
 import * as React from "react"
 
-import { Logo } from "@/assets/icons/Logo"
 import {
   Sidebar,
   SidebarContent,
@@ -32,9 +31,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <Link to="/">
-          <Logo />
-        </Link>
+         <Link to="/" className="flex items-center gap-2 text-primary hover:text-primary/90 transition-colors">
+           
+            <span className="font-bold text-xl">RideShare</span>
+          </Link>
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
