@@ -1,31 +1,8 @@
 // store/slices/authSlice.ts
+import { AuthState, DriverStatus, User } from '@/types/auth.type';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-export type UserRole = 'rider' | 'driver' | 'admin';
-export type UserStatus = 'active' | 'blocked' | 'suspended';
-export type DriverStatus = 'online' | 'offline';
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  status: UserStatus;
-  phone?: string;
-  avatar?: string;
-  driverStatus?: DriverStatus;
-  licenseNumber?: string;
-  vehicleInfo?: {
-    model: string;
-    plate: string;
-    color?: string;
-  };
-}
-
-export interface AuthState {
-  user: User | null;
-  isAuthenticated: boolean;
-}
 
 const initialState: AuthState = {
   user: null,
