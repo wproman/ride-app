@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import Password from "@/components/ui/password";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import config from "@/config";
 import { cn } from "@/lib/utils";
 import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -338,13 +339,14 @@ export function RegisterForm({
         </div>
       </div>
 
-      <Button
-        type="button"
-        variant="outline"
-        className="w-full"
-      >
-        Sign up with Google
-      </Button>
+    <Button
+  onClick={() => window.open(`${config.baseUrl}/auth/google`)}
+  type="button"
+  variant="outline"
+  className="w-full"
+>
+  Continue with Google
+</Button>
 
       <div className="text-center text-sm">
         Already have an account?{" "}

@@ -159,13 +159,13 @@ export function LoginForm({
       </div>
 
       <Button
-        onClick={() => window.open(`${config.baseUrl}/auth/google`)}
-        type="button"
-        variant="outline"
-        className="w-full"
-      >
-        Login with Google
-      </Button>
+  onClick={() => window.open(`${config.baseUrl}/auth/google`)}
+  type="button"
+  variant="outline"
+  className="w-full"
+>
+  Continue with Google
+</Button>
 
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
