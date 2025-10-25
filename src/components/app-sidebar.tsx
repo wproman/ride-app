@@ -1,5 +1,3 @@
-import * as React from "react"
-
 import {
   Sidebar,
   SidebarContent,
@@ -11,33 +9,38 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  useSidebar, // Add this import
 } from "@/components/ui/sidebar"
-// auth theke getprofile import kora sila jeta ami profileApi diya change korlam 8:00pm
 import { useGetProfileQuery } from "@/redux/features/user/profileApi"
 import { getSidebarItems } from "@/utils/getSidebarItems"
+import * as React from "react"
 import { Link } from "react-router"
 
-// This is sample data.
-
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const {data: userData} = useGetProfileQuery(undefined)
+  const { data: userData } = useGetProfileQuery(undefined)
+  const { setOpenMobile } = useSidebar() // Get the sidebar context
  
   const data = {
+    navMain: getSidebarItems(userData?.data?.role),
+  }
 
-  navMain: getSidebarItems(userData?.data?.role),
-}
+  // Handle menu item click to close sidebar on mobile
+  const handleMenuItemClick = () => {
+    setOpenMobile(false) // This closes the mobile sidebar
+  }
 
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-         <Link to="/" className="flex items-center gap-2 text-primary hover:text-primary/90 transition-colors">
-           
-            <span className="font-bold text-xl">RideShare</span>
-          </Link>
+        <Link 
+          to="/" 
+          className="flex items-center gap-2 text-primary hover:text-primary/90 transition-colors"
+          onClick={handleMenuItemClick}
+        >
+          <span className="font-bold text-xl">RideShare</span>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
-        {/* We create a SidebarGroup for each parent. */}
         {data.navMain.map((item, index) => (
           <SidebarGroup key={index}>
             <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
@@ -45,8 +48,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild >
-                      <Link to ={item.url}>{item.title} </Link>
+                    <SidebarMenuButton asChild>
+                      <Link 
+                        to={item.url} 
+                        onClick={handleMenuItemClick} // Add this click handler
+                      >
+                        {item.title}
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
