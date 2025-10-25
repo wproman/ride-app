@@ -19,18 +19,18 @@ import { Link } from 'react-router';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gradient-to-b from-background to-muted/20 border-t">
+    <footer className="bg-linear-to-b from-background to-muted/20 border-t">
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-8">
           {/* Brand Section */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-12 h-12 bg-linear-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg">
                 <Car className="h-6 w-6 text-primary-foreground" />
               </div>
               <div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+                <span className="text-2xl font-bold bg-linear-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
                   RideShare
                 </span>
                 <p className="text-xs text-muted-foreground mt-1">Your Journey, Our Priority</p>
@@ -232,7 +232,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* App Download CTA */}
-        <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-2xl p-6 mb-8 border">
+        <div className="bg-linear-to-r from-primary/10 to-primary/5 rounded-2xl p-6 mb-8 border">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
             <div className="text-center lg:text-left">
               <h3 className="text-lg font-semibold mb-2">Get the RideShare App</h3>

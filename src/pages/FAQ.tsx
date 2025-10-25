@@ -237,7 +237,7 @@ const FAQ: React.FC = () => {
               </Card>
 
               {/* Support CTA */}
-              <Card className="bg-gradient-to-r from-primary to-purple-600 border-0">
+              <Card className="bg-linear-to-r from-primary to-purple-600 border-0">
                 <CardContent className="p-6 text-white text-center">
                   <div className="max-w-2xl mx-auto">
                     <h3 className="text-xl font-bold mb-3">Still need help?</h3>

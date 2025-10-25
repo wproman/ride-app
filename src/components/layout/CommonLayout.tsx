@@ -12,7 +12,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div className="min-h-screen flex flex-col">
        <ScrollToTop />
       <Navbar />
-      <main className="flex-grow">
+      <main className="grow">
         {children}
       </main>
       <Footer />

@@ -4,7 +4,7 @@ A complete ride-hailing platform (like Uber/Pathao) built with React, TypeScript
 
 ## 🚀 Live Deployment
 **Frontend:** [https://your-rideshare-app.vercel.app](https://your-rideshare-app.vercel.app)  
-**Backend API:** [https://b5-5.vercel.app/](https://b5-5.vercel.app/)
+**Backend API:** [https://ride-app-gamma.vercel.app/](https://b5-5.vercel.app/)
 
 ## 📖 Project Overview
 RideShare is a full-stack ride-hailing application similar to Uber, built with modern web technologies. The platform connects riders with drivers, providing real-time ride tracking, secure payments, and a seamless user experience for both parties.
