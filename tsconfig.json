@@ -3,13 +3,30 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ],  "compilerOptions": {
+  ],
+  "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }, 
+    },
+
+    /* ✅ Compatibility and safety */
     "skipLibCheck": true,
-    // "jsx": "react-jsx",
-    // "strict" : false
+    "strict": true,
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* ✅ Module settings (important fix) */
+    "module": "esnext",
+    "moduleResolution": "bundler",
+
+    /* ✅ Quality of life */
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+
+    /* ✅ React JSX config for Vite + React 19 */
+    "jsx": "react-jsx"
   }
 }
