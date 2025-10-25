@@ -1,35 +1,23 @@
 import App from "@/App";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-// import DashboardLayout from "@/components/layout/DashboardLayout";
+
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import FAQ from "@/pages/FAQ";
 import Features from "@/pages/Features";
-// import AccountStatus from "@/pages/auth/AccountStatus";
-// import Login from "@/pages/Login";
+
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import { generateRoutes } from "@/utils/generateRoutes";
 
-// import { generateRoutes } from "@/utils/generateRoutes";
+
 import { createBrowserRouter, Navigate, } from "react-router";
 import { adminSidebarItems } from "./adminSidebarItems";
 
-// import { adminSidebarItems } from "./adminSidebarItems";
-// import { userSidebarItems } from "./userSidebarItems";
-// import { withAuth } from "@/utils/withAuth";
-// import Unauthorized from "@/pages/Unauthorized";
-// import { role } from "@/constants/role";
-// import { TRole } from "@/types";
-// import Tours from "@/pages/Tours";
-// import TourDetails from "@/pages/TourDetails";
-// import Booking from "@/pages/Booking";
-// import Homepage from "@/pages/Homepage";
-// import Success from "@/pages/Payment/Success";
-// import Fail from "@/pages/Payment/Fail";
+
 import { role } from "@/constance/role";
 import AccountStatus from "@/pages/auth/AccountStatus";
-// import DriverLiveRide from "@/pages/Driver/DriverLiveRide";
+
 import DriverLiveRide from "@/pages/Driver/DriverLiveRide";
 import Home from "@/pages/Home";
 import LiveRideTracking from "@/pages/Ride/[Live-ride]";
@@ -67,18 +55,7 @@ export const router = createBrowserRouter([
         Component: FAQ,
         path: "faq",
       },
-      // {
-      //   Component: Tours,
-      //   path: "tours",
-      // },
-      // {
-      //   Component: TourDetails,
-      //   path: "tours/:id",
-      // },
-      // {
-      //   Component: withAuth(Booking),
-      //   path: "booking/:id",
-      // },
+    
     ],
   },
 

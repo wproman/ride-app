@@ -1,11 +1,30 @@
+
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useAppSelector } from '@/redux/hooks';
 import { ArrowRight, Car, MapPin, Star, Users } from 'lucide-react';
 import React from 'react';
 import { Link } from 'react-router';
+ // Adjust import path as needed
 
 const HeroSection: React.FC = () => {
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+  const getDashboardInfo = () => {
+  if (!user) return { path: '/dashboard', text: 'Go to Dashboard' };
+  
+  switch (user.role) {
+    case 'admin':
+      return { path: '/admin', text: 'Admin Dashboard' };
+    case 'driver':
+      return { path: '/driver', text: 'Driver Dashboard' };
+    case 'rider':
+      return { path: '/rider', text: 'Rider Dashboard' };
+    default:
+      return { path: '/dashboard', text: 'Go to Dashboard' };
+  }
+};
   return (
     <section className="bg-linear-to-r from-primary to-purple-600 text-primary-foreground">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -26,18 +45,33 @@ const HeroSection: React.FC = () => {
               </p>
             </div>
 
-            {/* Action Buttons */}
+            {/* Action Buttons - Conditional */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button
-                asChild
-                size="lg"
-                className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold px-8 py-6 shadow-lg"
-              >
-                <Link to="/register">
-                  <Car className="h-5 w-5 mr-2" />
-                  Get Started Today
-                </Link>
-              </Button>
+    
+{isAuthenticated ? (
+  <Button
+    asChild
+    size="lg"
+    className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold px-8 py-6 shadow-lg"
+  >
+    <Link to={getDashboardInfo().path}>
+      <Car className="h-5 w-5 mr-2" />
+      {getDashboardInfo().text}
+    </Link>
+  </Button>
+) : (
+  <Button
+    asChild
+    size="lg"
+    className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold px-8 py-6 shadow-lg"
+  >
+    <Link to="/register">
+      <Car className="h-5 w-5 mr-2" />
+      Get Started Today
+    </Link>
+  </Button>
+)}
+              
               <Button
                 asChild
                 variant="outline"
