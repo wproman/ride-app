@@ -133,9 +133,9 @@ export function RegisterForm({
   };
 
   return (
-    <div className={cn("space-y-4", className)} {...props}>
+    <div className={cn("space-y-2 max-h-[80vh] overflow-y-auto", className)} {...props}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           {/* Basic Information */}
           <FormField
             control={form.control}

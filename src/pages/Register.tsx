@@ -47,9 +47,9 @@ export default function Register() {
       </div>
 
       {/* Right Side - Registration Form */}
-      <div className="flex flex-col p-4 md:p-6">
+      <div className="flex flex-col p-2 md:p-6">
         {/* Header */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center">
           <Button variant="ghost" size="sm" asChild className="gap-2">
             <Link to="/">
               <ArrowLeft className="h-4 w-4" />
@@ -66,7 +66,7 @@ export default function Register() {
         <div className="flex-1 flex items-center justify-center">
           <div className="w-full max-w-sm">
             <Card className="border shadow-sm">
-              <CardHeader className="text-center space-y-1 pb-4">
+              <CardHeader className="text-center space-y-1">
                 <CardTitle className="text-xl">Create Account</CardTitle>
                 <CardDescription>
                   Join RideShare today and start your journey

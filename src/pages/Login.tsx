@@ -14,7 +14,7 @@ export default function Login() {
       {/* Left Side - Login Form */}
       <div className="flex flex-col p-4 md:p-6">
         {/* Header */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center">
           <Button variant="ghost" size="sm" asChild className="gap-2">
             <Link to="/">
               <ArrowLeft className="h-4 w-4" />
