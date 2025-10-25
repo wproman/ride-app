@@ -108,60 +108,6 @@ const navigationLinks = [
   }
 ]
 
-// Public pages that should be accessible without authentication
-// const publicPages = [
-//   {
-//     href: "/",
-//     sections: [
-//       "Hero Banner",
-//       "How-it-works Overview", 
-//       "Service Highlights",
-//       "Customer Testimonials",
-//       "Call-to-action Prompts",
-//       "Special Offers"
-//     ]
-//   },
-//   {
-//     href: "/about",
-//     sections: [
-//       "Company Background",
-//       "Our Mission & Vision",
-//       "Team Profiles",
-//       "Company Values",
-//       "Achievements & Milestones"
-//     ]
-//   },
-//   {
-//     href: "/features",
-//     sections: [
-//       "Rider Capabilities",
-//       "Driver Features", 
-//       "Admin Functions",
-//       "Safety Features",
-//       "Technology Stack"
-//     ]
-//   },
-//   {
-//     href: "/contact", 
-//     sections: [
-//       "Contact Form",
-//       "Office Locations",
-//       "Support Channels",
-//       "Response Time Info",
-//       "Emergency Contacts"
-//     ]
-//   },
-//   {
-//     href: "/faq",
-//     sections: [
-//       "Searchable FAQ List",
-//       "Booking Questions",
-//       "Payment Issues",
-//       "Safety Concerns",
-//       "Technical Support"
-//     ]
-//   }
-// ]
 
 export default function Navbar() {
   const { data, isLoading } = useGetProfileQuery(undefined)
@@ -190,7 +136,7 @@ export default function Navbar() {
 
   if (isLoggingOut) {
     return (
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
         <div className="container mx-auto px-4 flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Link to="/" className="flex items-center gap-2 text-primary hover:text-primary/90">
@@ -210,7 +156,7 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="container mx-auto px-4 flex h-16 items-center justify-between">
         {/* Left side - Logo and Navigation */}
         <div className="flex items-center gap-8">
@@ -268,7 +214,7 @@ export default function Navbar() {
                                   to={dropdownItem.href}
                                   className="flex items-start gap-3 p-3 rounded-lg hover:bg-accent transition-colors group border"
                                 >
-                                  <div className="flex-shrink-0 mt-0.5">
+                                  <div className="shrink-0 mt-0.5">
                                     <IconComponent className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
                                   </div>
                                   <div className="flex-1 min-w-0">
@@ -315,7 +261,7 @@ export default function Navbar() {
                 <Link to="/login">Log In</Link>
               </Button>
               <Button asChild size="sm">
-                <Link to="/signup" className="flex items-center gap-1">
+                <Link to="/register" className="flex items-center gap-1">
                   <User className="h-4 w-4" />
                   Sign Up
                 </Link>
