@@ -30,7 +30,6 @@ import {
   ChevronDown,
   LogOut,
   Settings,
-  Shield,
   User
 } from "lucide-react"
 import { Link, useNavigate } from "react-router"
@@ -67,12 +66,12 @@ const navigationLinks = [
         icon: Car, 
         description: "Flexible schedules, earning opportunities, support" 
       },
-      { 
-        href: "/features/admin", 
-        label: "Admin Features", 
-        icon: Shield, 
-        description: "Dashboard analytics, user management, reports" 
-      },
+      // { 
+      //   href: "/features/admin", 
+      //   label: "Admin Features", 
+      //   icon: Shield, 
+      //   description: "Dashboard analytics, user management, reports" 
+      // },
     ]
   },
   { 

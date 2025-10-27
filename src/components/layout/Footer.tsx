@@ -270,7 +270,7 @@ const Footer: React.FC = () => {
             </div>
             <div>
               <p className="font-medium">Call Us</p>
-              <p>+1 (555) 123-4567</p>
+              <p>+880 1718407482</p>
             </div>
           </div>
           <div className="flex items-center gap-3 text-sm text-muted-foreground group hover:text-foreground transition-colors">
@@ -279,7 +279,7 @@ const Footer: React.FC = () => {
             </div>
             <div>
               <p className="font-medium">Visit Us</p>
-              <p>San Francisco, CA</p>
+              <p>Dhaka, Bangladesh</p>
             </div>
           </div>
         </div>
@@ -293,7 +293,7 @@ const Footer: React.FC = () => {
           </div>
           
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
-            <span>© 2024 RideShare. All rights reserved.</span>
+            <span>© 2025 RideShare. All rights reserved.</span>
             <div className="flex gap-4">
               <a href="#" className="hover:text-foreground transition-colors">Accessibility</a>
               <a href="#" className="hover:text-foreground transition-colors">Sitemap</a>
