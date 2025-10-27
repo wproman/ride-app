@@ -104,7 +104,7 @@ const DriverFeatures = () => {
                 <ul className="space-y-2">
                   {feature.details.map((detail, idx) => (
                     <li key={idx} className="flex items-center text-sm text-muted-foreground">
-                      <Zap className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
+                      <Zap className="h-4 w-4 text-green-500 mr-2 shrink-0" />
                       {detail}
                     </li>
                   ))}
@@ -163,7 +163,7 @@ const DriverFeatures = () => {
         </div>
 
         {/* CTA Section */}
-        <Card className="bg-gradient-to-r from-green-600 to-green-700 text-white">
+        <Card className="bg-linear-to-r from-green-600 to-green-700 text-white">
           <CardContent className="p-8 text-center">
             <h2 className="text-2xl font-bold mb-4">Ready to Start Driving?</h2>
             <p className="text-green-100 mb-6 max-w-md mx-auto">

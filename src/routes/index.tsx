@@ -23,6 +23,7 @@ import Home from "@/pages/Home";
 import LiveRideTracking from "@/pages/Ride/[Live-ride]";
 import RideDetails from "@/pages/Ride/RideDetails";
 import Unauthorized from "@/pages/Unauthorized";
+import AdminFeatures from "@/pages/User/Features/FeatureAdmin";
 import DriverFeatures from "@/pages/User/Features/FeatureDriver";
 import RiderFeatures from "@/pages/User/Features/FeaturesRider";
 import { riderSidebarItems } from '@/routes/riderSidebarItems';
@@ -137,8 +138,8 @@ export const router = createBrowserRouter([
 
   },
    {
-    Component: DriverFeatures,
-    path: "features/admin", 
+    Component: AdminFeatures,
+    path: "admin-features", 
 
   },
 
