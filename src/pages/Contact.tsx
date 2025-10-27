@@ -43,21 +43,21 @@ const Contact: React.FC = () => {
     {
       icon: Mail,
       title: 'Email',
-      items: ['support@rideshare.com', 'business@rideshare.com'],
+      items: ['support@rideshare.com', 'rmn.tda@gmail'],
       color: 'text-blue-600',
       bgColor: 'bg-blue-100'
     },
     {
       icon: Phone,
       title: 'Phone',
-      items: ['+1 (555) 123-4567 (Support)', '+1 (555) 987-6543 (Business)'],
+      items: ['+8801718407482(Support)', '+8801740066066 (Business)'],
       color: 'text-green-600',
       bgColor: 'bg-green-100'
     },
     {
       icon: MapPin,
       title: 'Office',
-      items: ['123 Tech Street', 'San Francisco, CA 94107', 'United States'],
+      items: ['Basudhara', 'Dhaka', 'Bangladesh'],
       color: 'text-purple-600',
       bgColor: 'bg-purple-100'
     },
