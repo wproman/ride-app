@@ -78,19 +78,60 @@ RideShare is a full-stack ride-hailing application similar to Uber, built with m
 - Git
 
 ### 1. Clone the Repository
-```bash
-git https://github.com/wproman/ride-app.git
-cd ride-app
+     git https://github.com/wproman/ride-app.git
+     cd ride-app
+     npm install
+     npm run dev
+     
 
-
-phrider@gmail.com
-pass: phrider
-
-phdriver@gmail.com
-pass: phdriver
-
-
- "email": "super@gmail.com",  
- "password": "12345678"
+### App runs on:
+🖥 Frontend → http://localhost:3000
+⚙️ Backend → http://localhost:5000
  
- 
+## 🔒 Security
+
+- Passwords hashed with bcryptjs
+
+- JWT tokens for authentication
+
+- Role-based middleware protection
+
+- Input validation using Zod/Joi
+
+- CORS and Helmet for API security
+
+### 🧮 Future Enhancements
+
+✅ Real-time WebSocket-based location updates
+
+✅ In-app chat between rider & driver
+
+✅ Advanced payment gateway integration (ssl)
+
+✅ Push notifications for ride status
+
+👨‍💻 Author
+
+### Roman Ahmed
+📧 Email: [rmn.tda@gmail.com]
+🌍 GitHub: @wproman
+
+💼 LinkedIn: linkedin.com/in/romanahmed
+
+### 🪪 License
+
+This project is licensed under the MIT License — you are free to use, modify, and distribute it.
+
+### 🌟 Acknowledgements
+
+## React
+
+## Express
+
+## MongoDB
+
+## Vercel
+
+## shadcn/ui
+
+## Tailwind CSS
