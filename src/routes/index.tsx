@@ -136,6 +136,11 @@ export const router = createBrowserRouter([
     path: "features/driver", 
 
   },
+   {
+    Component: DriverFeatures,
+    path: "features/admin", 
+
+  },
 
     
 ]);
